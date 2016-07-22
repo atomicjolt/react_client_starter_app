@@ -2,7 +2,7 @@
 
 import React                    from 'react';
 import assets                   from '../libs/assets';
-
+import { MyComponent }          from './my_component';
 class Home extends React.Component {
 
   render(){
@@ -10,7 +10,8 @@ class Home extends React.Component {
     const img = assets("./images/atomicjolt.jpg");
 
     return<div>
-    <img src={img} />
+      <MyComponent myProp="myProp" />
+      <img src={img} />
     </div>;
   }
 

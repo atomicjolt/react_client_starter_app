@@ -36,6 +36,8 @@ module.exports = function(stage){
     plugins = plugins + ',plugins[]=transform-react-constant-elements'; // Hoists static React components to reduce calls to createElement
     plugins = plugins + ',plugins[]=transform-react-inline-elements';   // Replaces the React.createElement function with a more optimized one for production
     plugins = plugins + ',plugins[]=transform-react-remove-prop-types'; // Removes prop types from code
+  } else if (test) {
+    plugins = plugins + ',plugins[]=babel-plugin-rewire'
   }
 
   var babel   = 'babel?' + plugins + '&' + presets;
