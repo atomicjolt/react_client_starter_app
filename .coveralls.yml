@@ -1,1 +1,1 @@
-repo_token: ENV["COVERALLS_TOKEN"]
+repo_token: <%= ENV["COVERALLS_TOKEN"] %>
