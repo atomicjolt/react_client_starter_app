@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "postinstall": "node node_modules/phantomjs-prebuilt/install.js"
+  },
   "dependencies": {
     "babel": "6.5.2",
     "babel-polyfill": "^6.16.0",
@@ -30,7 +33,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "chunk-manifest-webpack-plugin": "0.1.0",
-    "coveralls": "2.11.15",
+    "coveralls": "^2.11.15",
     "css-loader": "0.26.1",
     "dotenv": "2.0.0",
     "ecstatic": "2.1.0",
