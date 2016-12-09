@@ -26,6 +26,8 @@ rules:
     - error
     - unix
   import/no-unresolved: 0
+  no-multi-spaces: 0
+  comma-dangle: "only-multiline"
   import/no-extraneous-dependencies:
     - error
     - devDependencies: true
