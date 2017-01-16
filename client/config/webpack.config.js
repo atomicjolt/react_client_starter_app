@@ -75,8 +75,8 @@ module.exports = function webpackConfig(stage) {
       new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.optimize.AggressiveMergingPlugin(),
       new ChunkManifestPlugin({
-        filename: 'webpack-common-manifest.json',
-        manfiestVariable: 'webpackBundleManifest'
+        filename         : 'webpack-common-manifest.json',
+        manfiestVariable : 'webpackBundleManifest'
       }),
       extractCSS
 
@@ -97,7 +97,7 @@ module.exports = function webpackConfig(stage) {
     ];
   }
 
-  const loaders = [
+  const rules = [
     { test: /\.js$/, loaders: jsLoaders, exclude: /node_modules/ },
     { test: /\.jsx?$/, loaders: jsLoaders, exclude: /node_modules/ },
     { test: /\.scss$/i, loader: extractCSS.extract(scssLoaders) },
@@ -121,8 +121,8 @@ module.exports = function webpackConfig(stage) {
       pathinfo          : !production
     },
     resolve: {
-      extensions         : ['', '.js', '.json', '.jsx'],
-      modulesDirectories : ['node_modules', 'vendor']
+      extensions : ['.js', '.json', '.jsx'],
+      modules    : ['node_modules', 'vendor']
     },
     cache          : true,
     quiet          : false,
@@ -132,7 +132,7 @@ module.exports = function webpackConfig(stage) {
     devtool        : production ? false : 'eval',  // http://webpack.github.io/docs/configuration.html#devtool
     stats          : { colors: true },
     plugins,
-    module         : { loaders },
+    module         : { rules },
     devServer      : {
       stats: {
         cached  : false,
