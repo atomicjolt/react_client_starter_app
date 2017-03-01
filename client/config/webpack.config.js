@@ -70,7 +70,6 @@ module.exports = function webpackConfig(stage) {
   if (production) {
     plugins = [
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"', __DEV__: false }),
-      new webpack.optimize.DedupePlugin(),
       new webpack.optimize.UglifyJsPlugin(),
       new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.optimize.AggressiveMergingPlugin(),
@@ -108,7 +107,7 @@ module.exports = function webpackConfig(stage) {
   ];
 
   return {
-    context : __dirname,
+    context : path.resolve('../', __dirname),
     entry   : entries,
     output  : {
       publicPath,
