@@ -33,9 +33,9 @@ module.exports = function webpackConfig(stage) {
     // Add test plugins as needed
   }
 
-  const babel = `babel?${babelPlugins}&${presets}`;
+  const babelLoader = `babel-loader?${babelPlugins}&${presets}`;
 
-  const jsLoaders = [babel];
+  const jsLoaders = [babelLoader];
 
   const cssLoaders = ['css-loader?importLoaders=1', 'postcss-loader'];
 
@@ -103,8 +103,8 @@ module.exports = function webpackConfig(stage) {
     { test: /\.scss$/i, loader: extractCSS.extract(scssLoaders) },
     { test: /\.css$/i, loader: extractCSS.extract(cssLoaders) },
     { test: /\.less$/i, loader: extractCSS.extract(lessLoaders) },
-    { test: /.*\.(gif|png|jpg|jpeg|svg)$/, loaders: ['url?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] },
-    { test: /.*\.(eot|woff2|woff|ttf)$/, loaders: ['url?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] }
+    { test: /.*\.(gif|png|jpg|jpeg|svg)$/, loaders: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] },
+    { test: /.*\.(eot|woff2|woff|ttf)$/, loaders: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] }
   ];
 
   return {
@@ -122,13 +122,9 @@ module.exports = function webpackConfig(stage) {
     },
     resolve: {
       extensions : ['.js', '.json', '.jsx'],
-      modules    : ['node_modules', 'vendor']
+      modules    : ['node_modules']
     },
     cache          : true,
-    quiet          : false,
-    noInfo         : false,
-    debug          : false,
-    outputPathinfo : !production,
     devtool        : production ? false : 'eval',  // http://webpack.github.io/docs/configuration.html#devtool
     stats          : { colors: true },
     plugins,
