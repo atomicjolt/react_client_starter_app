@@ -70,8 +70,9 @@ module.exports = function webpackConfig(stage) {
   if (production) {
     plugins = [
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"', __DEV__: false }),
-      new webpack.optimize.UglifyJsPlugin(),
-      new webpack.optimize.OccurrenceOrderPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+        sourceMap: 'cheap-source-map'
+      }),
       new webpack.optimize.AggressiveMergingPlugin(),
       new ChunkManifestPlugin({
         filename         : 'webpack-common-manifest.json',
@@ -86,7 +87,7 @@ module.exports = function webpackConfig(stage) {
     plugins = [
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"', __DEV__: true }),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
+      new webpack.NoEmitOnErrorsPlugin(),
       extractCSS
     ];
   } else {
@@ -97,13 +98,13 @@ module.exports = function webpackConfig(stage) {
   }
 
   const rules = [
-    { test: /\.js$/, loaders: jsLoaders, exclude: /node_modules/ },
-    { test: /\.jsx?$/, loaders: jsLoaders, exclude: /node_modules/ },
-    { test: /\.scss$/i, loader: extractCSS.extract(scssLoaders) },
-    { test: /\.css$/i, loader: extractCSS.extract(cssLoaders) },
-    { test: /\.less$/i, loader: extractCSS.extract(lessLoaders) },
-    { test: /.*\.(gif|png|jpg|jpeg|svg)$/, loaders: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] },
-    { test: /.*\.(eot|woff2|woff|ttf)$/, loaders: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] }
+    { test: /\.js$/, use: jsLoaders, exclude: /node_modules/ },
+    { test: /\.jsx?$/, use: jsLoaders, exclude: /node_modules/ },
+    { test: /\.scss$/i, use: extractCSS.extract(scssLoaders) },
+    { test: /\.css$/i, use: extractCSS.extract(cssLoaders) },
+    { test: /\.less$/i, use: extractCSS.extract(lessLoaders) },
+    { test: /.*\.(gif|png|jpg|jpeg|svg)$/, use: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] },
+    { test: /.*\.(eot|woff2|woff|ttf)$/, use: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] }
   ];
 
   return {
