@@ -75,8 +75,8 @@ module.exports = function webpackConfig(stage) {
       }),
       new webpack.optimize.AggressiveMergingPlugin(),
       new ChunkManifestPlugin({
-        filename         : 'webpack-common-manifest.json',
-        manfiestVariable : 'webpackBundleManifest'
+        filename: 'webpack-common-manifest.json',
+        manfiestVariable: 'webpackBundleManifest'
       }),
       extractCSS
 
@@ -108,31 +108,31 @@ module.exports = function webpackConfig(stage) {
   ];
 
   return {
-    context : path.resolve('../', __dirname),
-    entry   : entries,
-    output  : {
+    context: path.resolve('../', __dirname),
+    entry: entries,
+    output: {
       publicPath,
       // Location where generated files will be output
-      path              : production ? settings.prodOutput : settings.devOutput,
-      filename          : production ? `[name]-[chunkhash]${settings.buildSuffix}` : `[name]${settings.buildSuffix}`,
-      chunkFilename     : production ? `[id]-[chunkhash]${settings.buildSuffix}` : `[id]${settings.buildSuffix}`,
-      sourceMapFilename : 'debugging/[file].map',
+      path: production ? settings.prodOutput : settings.devOutput,
+      filename: production ? `[name]-[chunkhash]${settings.buildSuffix}` : `[name]${settings.buildSuffix}`,
+      chunkFilename: production ? `[id]-[chunkhash]${settings.buildSuffix}` : `[id]${settings.buildSuffix}`,
+      sourceMapFilename: 'debugging/[file].map',
       // http://webpack.github.io/docs/configuration.html#output-pathinfo
-      pathinfo          : !production
+      pathinfo: !production
     },
     resolve: {
-      extensions : ['.js', '.json', '.jsx'],
-      modules    : ['node_modules']
+      extensions: ['.js', '.json', '.jsx'],
+      modules: ['node_modules']
     },
-    cache          : true,
-    devtool        : production ? false : 'eval',  // http://webpack.github.io/docs/configuration.html#devtool
-    stats          : { colors: true },
+    cache: true,
+    devtool: production ? false : 'eval',  // http://webpack.github.io/docs/configuration.html#devtool
+    stats: { colors: true },
     plugins,
-    module         : { rules },
-    devServer      : {
+    module: { rules },
+    devServer: {
       stats: {
-        cached  : false,
-        exclude : [/node_modules[\\/]react(-router)?[\\/]/]
+        cached: false,
+        exclude: [/node_modules[\\/]react(-router)?[\\/]/]
       }
     }
   };
