@@ -9,6 +9,8 @@ const build                = require('./tools/build');
 
 const app                  = express();
 
+const localIp = '0.0.0.0';
+
 function launch() {
 
   const compiler = webpack(webpackConfig);
@@ -29,12 +31,12 @@ function launch() {
     res.sendFile(path.join(settings.devOutput, req.url));
   });
 
-  app.listen(settings.hotPort, '0.0.0.0', (err) => {
+  app.listen(settings.hotPort, localIp, (err) => {
     if (err) {
       console.log(err);
       return;
     }
-    console.log(`Listening on: ${webpackConfig.output.publicPath}`);
+    console.log(`Listening on: http://${localIp}:${settings.hotPort}${webpackConfig.output.publicPath}`);
     console.log(`Serving content from: ${settings.devOutput}`);
   });
 }
