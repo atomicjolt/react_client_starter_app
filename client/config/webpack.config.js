@@ -1,9 +1,10 @@
-const webpack             = require('webpack');
-const path                = require('path');
-const ExtractTextPlugin   = require('extract-text-webpack-plugin');
-const ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
-const _                   = require('lodash');
-const settings            = require('./settings');
+const webpack              = require('webpack');
+const path                 = require('path');
+const ExtractTextPlugin    = require('extract-text-webpack-plugin');
+const ChunkManifestPlugin  = require('chunk-manifest-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const _                    = require('lodash');
+const settings             = require('./settings');
 
 module.exports = function webpackConfig(stage) {
 
@@ -77,6 +78,9 @@ module.exports = function webpackConfig(stage) {
       new ChunkManifestPlugin({
         filename: 'webpack-common-manifest.json',
         manfiestVariable: 'webpackBundleManifest'
+      }),
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'static'
       }),
       extractCSS
 
