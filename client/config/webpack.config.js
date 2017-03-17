@@ -120,7 +120,7 @@ module.exports = function webpackConfig(stage) {
       path: production ? settings.prodOutput : settings.devOutput,
       filename: production ? `[name]-[chunkhash]${settings.buildSuffix}` : `[name]${settings.buildSuffix}`,
       chunkFilename: production ? `[id]-[chunkhash]${settings.buildSuffix}` : `[id]${settings.buildSuffix}`,
-      sourceMapFilename: 'debugging/[file].map',
+      sourceMapFilename: '[name].map',
       // http://webpack.github.io/docs/configuration.html#output-pathinfo
       pathinfo: !production
     },
@@ -129,7 +129,7 @@ module.exports = function webpackConfig(stage) {
       modules: ['node_modules']
     },
     cache: true,
-    devtool: production ? false : 'eval',  // http://webpack.github.io/docs/configuration.html#devtool
+    devtool: production ? 'source-map' : 'cheap-module-source-map', // https://webpack.js.org/configuration/devtool/
     stats: { colors: true },
     plugins,
     module: { rules },
