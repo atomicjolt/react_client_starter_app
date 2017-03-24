@@ -64,12 +64,9 @@ function buildContent(fullPath, templateDirs, webpackAssets, stage, options) {
 // -----------------------------------------------------------------------------
 // build html and markdown files in a given directory
 // -----------------------------------------------------------------------------
-function buildContents(inputPath, outputPath, webpackAssets, stage, options) {
+function buildContents(inputPath, outputPath, webpackAssets, stage, templateDirs, options) {
   let results = [];
   const files = fs.readdirSync(inputPath);
-  const templateDirs = _.map(options.templateDirs,
-    templateDir => path.join(inputPath, templateDir)
-  );
 
   files.forEach((fileName) => {
     const fullInputPath = path.join(inputPath, fileName);
@@ -82,6 +79,7 @@ function buildContents(inputPath, outputPath, webpackAssets, stage, options) {
           outputPath,
           webpackAssets,
           stage,
+          templateDirs,
           options
         ));
       } else {
@@ -90,7 +88,6 @@ function buildContents(inputPath, outputPath, webpackAssets, stage, options) {
           const page = buildContent(fullInputPath, templateDirs, webpackAssets, stage, options);
           let outFile = fileName;
           let outPath = outputPath;
-          let inPath = inputPath;
           if (page.destination && page.destination.length > 0) {
             if (_.endsWith(page.destination, '/')) {
               outPath = path.join(outPath, page.destination);
@@ -98,12 +95,11 @@ function buildContents(inputPath, outputPath, webpackAssets, stage, options) {
             } else {
               outFile = page.destination;
             }
-            inPath = '';
           }
-          page.outputFilePath = file.write(inPath, outPath, outFile, page.html, options);
+          page.outputFilePath = file.write(inputPath, outPath, outFile, page.html, options);
           results.push(page);
         } else {
-          file.copy(inputPath, outputPath, fileName, options);
+          file.copy(inputPath, fileName, outputPath, options);
         }
       }
     }

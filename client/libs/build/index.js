@@ -16,8 +16,8 @@ const argv                 = require('minimist')(process.argv.slice(2));
 const release              = argv.release;
 const stage                = release ? 'production' : 'development';
 
-const rootClientPath       = path.join(__dirname, '../../client');
-const outputPath           = stage === 'production' ? settings.prodOutput : settings.devOutput;
+const rootAppsPath         = path.join(__dirname, '../../apps');
+const rootBuildPath        = stage === 'production' ? settings.prodOutput : settings.devOutput;
 
 const options = {
   truncateSummaryAt : 1000,
@@ -25,7 +25,8 @@ const options = {
   buildSuffix       : settings.buildSuffix, // Webpack build suffix. ie _bundle.js
   templateDirs      : ['layouts'],
   templateData      : {}, // Object that will be passed to every page as it is rendered
-  templateMap       : {}  // Used to specify specific templates on a per file basis
+  templateMap       : {}, // Used to specify specific templates on a per file basis
+  rootAppsPath
 };
 
 // -----------------------------------------------------------------------------
@@ -62,14 +63,14 @@ function build(isHot) {
   return new Promise((resolve) => {
 
     // Delete everything in the output path
-    fs.emptydir(outputPath, () => {
+    fs.emptydir(rootBuildPath, () => {
 
       // Copy static files to build directory
       _.each(settings.apps, (app) => {
         try {
           const staticDir = `${app}/static`;
           console.log(`Copying static files in ${staticDir}`);
-          fs.copySync(staticDir, outputPath);
+          fs.copySync(staticDir, rootBuildPath);
         } catch (err) {
           // No static dir. Do nothing
         }
@@ -83,16 +84,21 @@ function build(isHot) {
           webpackAssets = fs.readJsonSync(`${packResults.webpackConfig.output.path}/webpack-assets.json`);
         }
 
-        const pages = [];
+        let pages = [];
 
         // Build html for each application
         _.each(settings.apps, (appPath, appName) => {
           console.log(`Building html for: ${appName}`);
-          _.concat(pages, content.buildContents(
-            path.join(appPath, 'html'),
-            outputPath,
+          const inputPath = path.join(appPath, 'html');
+          const templateDirs = _.map(options.templateDirs,
+            templateDir => path.join(inputPath, templateDir)
+          );
+          pages = _.concat(pages, content.buildContents(
+            inputPath,
+            rootBuildPath,
             webpackAssets,
             stage,
+            templateDirs,
             options
           ));
         });
@@ -115,7 +121,7 @@ function watch() {
     build(true).then((buildResults) => {
 
       // Watch content
-      nodeWatch(rootClientPath, (filePath) => {
+      nodeWatch(rootAppsPath, (filePath) => {
 
         const mainApp = _.find(settings.apps, app => _.include(filePath, app));
         const templateDirs = _.map(options.templateDirs,
@@ -132,7 +138,7 @@ function watch() {
         );
         page.outputFilePath = file.write(
           buildResults.inputPath,
-          outputPath,
+          rootBuildPath,
           path.basename(filePath),
           page.html,
           options
