@@ -12,6 +12,21 @@ const file            = require('./file');
 const ignoreFiles     = ['.DS_Store'];
 
 // -----------------------------------------------------------------------------
+// Generate the output file name and path
+// -----------------------------------------------------------------------------
+function outFilePath(page, outputPath, fullInputPath, originalInputPath) {
+  let out = path.join(outputPath, fullInputPath.replace(originalInputPath, ''));
+  if (page && page.destination && page.destination.length > 0) {
+    if (_.endsWith(page.destination, '/')) {
+      out = path.join(outputPath, page.destination, 'index.html');
+    } else {
+      out = page.destination;
+    }
+  }
+  return out;
+}
+
+// -----------------------------------------------------------------------------
 // build a single file
 // -----------------------------------------------------------------------------
 function buildContent(fullPath, templateDirs, webpackAssets, stage, options) {
@@ -64,7 +79,15 @@ function buildContent(fullPath, templateDirs, webpackAssets, stage, options) {
 // -----------------------------------------------------------------------------
 // build html and markdown files in a given directory
 // -----------------------------------------------------------------------------
-function buildContents(inputPath, outputPath, webpackAssets, stage, templateDirs, options) {
+function buildContents(
+  originalInputPath,
+  inputPath,
+  outputPath,
+  webpackAssets,
+  stage,
+  templateDirs,
+  options) {
+
   let results = [];
   const files = fs.readdirSync(inputPath);
 
@@ -75,6 +98,7 @@ function buildContents(inputPath, outputPath, webpackAssets, stage, templateDirs
     if (doOutput) {
       if (fs.statSync(fullInputPath).isDirectory()) {
         results = _.concat(results, buildContents(
+          originalInputPath,
           fullInputPath,
           outputPath,
           webpackAssets,
@@ -83,23 +107,15 @@ function buildContents(inputPath, outputPath, webpackAssets, stage, templateDirs
           options
         ));
       } else {
+
         const ext = path.extname(fullInputPath);
         if (_.includes(options.buildExtensions, ext)) {
           const page = buildContent(fullInputPath, templateDirs, webpackAssets, stage, options);
-          let outFile = fileName;
-          let outPath = outputPath;
-          if (page.destination && page.destination.length > 0) {
-            if (_.endsWith(page.destination, '/')) {
-              outPath = path.join(outPath, page.destination);
-              outFile = 'index.html';
-            } else {
-              outFile = page.destination;
-            }
-          }
-          page.outputFilePath = file.write(inputPath, outPath, outFile, page.html, options);
+          page.outputFilePath = file.write(
+            outFilePath(page, outputPath, fullInputPath, originalInputPath), page.html, options);
           results.push(page);
         } else {
-          file.copy(inputPath, fileName, outputPath, options);
+          file.copy(fullInputPath, outFilePath(null, outputPath, fullInputPath, originalInputPath));
         }
       }
     }
@@ -109,5 +125,6 @@ function buildContents(inputPath, outputPath, webpackAssets, stage, templateDirs
 
 module.exports = {
   buildContent,
-  buildContents
+  buildContents,
+  outFilePath
 };

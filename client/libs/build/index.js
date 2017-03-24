@@ -55,6 +55,13 @@ function buildWebpackEntries(isHot) {
   });
 }
 
+function buildHome() {
+  const links = _.map(settings.apps, (appPath, appName) =>
+    `<a href="/${appName}">${appName}</a>`
+  );
+  const home = `<html><head></head><body>${links.join('')}</body></html>`;
+  file.write(path.join(rootBuildPath, 'index.html'), home);
+}
 
 // -----------------------------------------------------------------------------
 // main build
@@ -88,20 +95,27 @@ function build(isHot) {
 
         // Build html for each application
         _.each(settings.apps, (appPath, appName) => {
+
           console.log(`Building html for: ${appName}`);
+
           const inputPath = path.join(appPath, 'html');
           const templateDirs = _.map(options.templateDirs,
             templateDir => path.join(inputPath, templateDir)
           );
+
           pages = _.concat(pages, content.buildContents(
             inputPath,
-            rootBuildPath,
+            inputPath,
+            path.join(rootBuildPath, appName),
             webpackAssets,
             stage,
             templateDirs,
             options
           ));
         });
+
+        // Build a default home page
+        buildHome();
 
         resolve({
           webpackConfig : packResults.webpackConfig,
@@ -116,33 +130,40 @@ function build(isHot) {
 // -----------------------------------------------------------------------------
 // watch
 // -----------------------------------------------------------------------------
+function appWatch(appPath, appName, buildResults) {
+
+  // Watch for content to change
+  nodeWatch(appPath, { recursive: true }, (evt, filePath) => {
+
+    const templateDirs = _.map(options.templateDirs,
+      templateDir => path.join(appPath, 'html', templateDir)
+    );
+
+    const outputPath = path.join(rootBuildPath, appName);
+    const originalInputPath = path.join(appPath, 'html');
+
+    // Build the page
+    const page = content.buildContent(
+      filePath,
+      templateDirs,
+      buildResults.webpackAssets,
+      stage,
+      options
+    );
+
+    page.outputFilePath = file.write(
+      content.outFilePath(page, outputPath, filePath, originalInputPath),
+      page.html
+    );
+
+  });
+}
+
 function watch() {
   return new Promise((resolve) => {
     build(true).then((buildResults) => {
-
-      // Watch content
-      nodeWatch(rootAppsPath, (filePath) => {
-
-        const mainApp = _.find(settings.apps, app => _.include(filePath, app));
-        const templateDirs = _.map(options.templateDirs,
-          templateDir => path.join(mainApp, 'html', templateDir)
-        );
-
-        // Build the page
-        const page = content.buildContent(
-          filePath,
-          templateDirs,
-          buildResults.webpackAssets,
-          stage,
-          options
-        );
-        page.outputFilePath = file.write(
-          buildResults.inputPath,
-          rootBuildPath,
-          path.basename(filePath),
-          page.html,
-          options
-        );
+      _.each(settings.apps, (appPath, appName) => {
+        appWatch(appPath, appName, buildResults);
       });
       resolve();
     });

@@ -122,7 +122,7 @@ module.exports = function webpackConfig(stage) {
     { test: /.*\.(eot|woff2|woff|ttf)$/, use: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] }
   ];
 
-  const modules = _.map(settings.apps, app => `${app}/node_modules`);
+  const modules = _.concat('node_modules', _.map(settings.apps, app => `${app}/node_modules`));
 
   return {
     context: path.resolve('../apps', __dirname),

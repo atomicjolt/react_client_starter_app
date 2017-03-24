@@ -5,7 +5,7 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const settings             = require('./config/settings');
 const webpackConfig        = require('./config/webpack.config')('hot');
 const path                 = require('path');
-const build                = require('./tools/build');
+const build                = require('./libs/build');
 
 const app                  = express();
 
