@@ -41,7 +41,10 @@ React code can be found in client/js. We use Redux and the React-Router.
 
 ## Html
 -----------
-All html files live in client/html. The build process will properly process ejs in any html files as well as process markdown for files that end in .md. All front matter in .md files will be available to the ejs templates. See about.md for an example.
+All html files live in client/html. The build process will properly process ejs in any html files as well
+as process markdown for files that end in .md. All front matter in .md files will be available to
+the ejs templates and will be used when generating html. For example, you can set a custom layout for the html
+file by setting `layout: custom_layout` in the front matter. See apps/hello_world/html/about.md for an example.
 
 
 ## Assets

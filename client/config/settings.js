@@ -1,8 +1,7 @@
-const info         = require('../../package.json');
-const deployConfig = require('../../.s3-website.json');
-const path         = require('path');
+const fs = require('fs-extra');
+const path = require('path');
 
-const clientAppPath = path.join(__dirname, '../');
+const deployConfig = require('../../.s3-website.json');
 
 const devRelativeOutput  = '/';
 const prodRelativeOutput = '/';
@@ -25,12 +24,20 @@ require('dotenv').load({ path: path.join(__dirname, '../../.env') });
 
 const hotPort = process.env.ASSETS_PORT || 8080;
 
-module.exports = {
-  title              : info.title,
-  author             : info.author,
-  version            : info.versions,
-  build              : Date.now(),
+// Get a list of all directories in the apps directory.
+// These will be used to generate the entries for webpack
+const appsDir = path.join(__dirname, '../apps/');
 
+const names = fs.readdirSync(appsDir)
+  .filter(file => fs.statSync(path.join(appsDir, file)).isDirectory());
+
+const apps = names.reduce(
+  (result, file) => Object.assign({}, result, {
+    [file] : path.join(appsDir, file),
+  })
+, {});
+
+module.exports = {
   devRelativeOutput,
   prodRelativeOutput,
 
@@ -45,14 +52,6 @@ module.exports = {
 
   buildSuffix: '_bundle.js',
 
-  staticDir: `${clientAppPath}static`,
-
-  entries: {
-    app: `${clientAppPath}js/app.jsx`
-  },
-
-  cssEntries: {
-    styles: `${clientAppPath}styles/styles.js`
-  }
+  apps
 
 };

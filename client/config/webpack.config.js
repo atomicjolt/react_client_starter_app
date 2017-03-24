@@ -48,23 +48,20 @@ module.exports = function webpackConfig(stage) {
   const lessLoaders = cssLoaders.slice(0);
   lessLoaders.push('less-loader');
 
-  let entries = _.cloneDeep(settings.entries);
-
-  const cssEntries = settings.cssEntries;
-  _.each(cssEntries, (_stylePath, name) => {
-    entries[name] = cssEntries[name];
-  });
-
-  if (stage === 'hot') {
-    entries = _.reduce(entries, (result, entry, key) => {
+  const entries = _.reduce(settings.apps, (result, app, key) => {
+    const entry = `${app}/app.jsx`;
+    if (stage === 'hot') {
+      // Add hot reload to entry
       result[key] = [
         'eventsource-polyfill',
         `webpack-hot-middleware/client?path=${publicPath}__webpack_hmr&timeout=20000&reload=true`,
         entry
       ];
-      return result;
-    }, {});
-  }
+    } else {
+      result[key] = entry;
+    }
+    return result;
+  }, {});
 
   const extractCSS = new ExtractTextPlugin(production ? '[name]-[chunkhash].css' : '[name].css');
 
@@ -92,7 +89,8 @@ module.exports = function webpackConfig(stage) {
         manfiestVariable: 'webpackBundleManifest'
       }),
       new BundleAnalyzerPlugin({
-        analyzerMode: 'static'
+        analyzerMode: 'static',
+        openAnalyzer: false
       }),
       // Generate webpack-assets.json to map path to assets generated with hashed names
       new AssetsPlugin({
@@ -124,8 +122,10 @@ module.exports = function webpackConfig(stage) {
     { test: /.*\.(eot|woff2|woff|ttf)$/, use: ['url-loader?limit=5000&hash=sha512&digest=hex&size=16&name=[name]-[hash].[ext]'] }
   ];
 
+  const modules = _.map(settings.apps, app => `${app}/node_modules`);
+
   return {
-    context: path.resolve('../', __dirname),
+    context: path.resolve('../apps', __dirname),
     entry: entries,
     output: {
       publicPath,
@@ -139,7 +139,7 @@ module.exports = function webpackConfig(stage) {
     },
     resolve: {
       extensions: ['.js', '.json', '.jsx'],
-      modules: ['node_modules']
+      modules
     },
     cache: true,
     devtool: production ? 'source-map' : 'cheap-module-source-map', // https://webpack.js.org/configuration/devtool/
