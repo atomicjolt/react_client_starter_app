@@ -1,5 +1,7 @@
-const build = require('./libs/build');
+const argv = require('minimist')(process.argv.slice(2));
 
-build.build(false).then((result) => {
-  console.log(`Done building Javascript and ${result.pages.length} pages.`);
-});
+const apps = require('./libs/build/apps');
+
+const stage = argv.release ? 'production' : 'development';
+
+apps.buildApps(stage, argv.onlyjs);

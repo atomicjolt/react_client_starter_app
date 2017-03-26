@@ -9,33 +9,14 @@ const content   = require('./content');
 
 // Settings
 const webpackConfigBuilder = require('../../config/webpack.config');
-const settings             = require('../../config/settings');
-
-const argv                 = require('minimist')(process.argv.slice(2));
-
-const release              = argv.release;
-const stage                = release ? 'production' : 'development';
-
-const rootAppsPath         = path.join(__dirname, '../../apps');
-const rootBuildPath        = stage === 'production' ? settings.prodOutput : settings.devOutput;
-
-const options = {
-  truncateSummaryAt : 1000,
-  buildExtensions   : ['.html', '.htm', '.md', '.markdown'], // file types to build (others will just be copied)
-  buildSuffix       : settings.buildSuffix, // Webpack build suffix. ie _bundle.js
-  templateDirs      : ['layouts'],
-  templateData      : {}, // Object that will be passed to every page as it is rendered
-  templateMap       : {}, // Used to specify specific templates on a per file basis
-  rootAppsPath
-};
 
 // -----------------------------------------------------------------------------
-// run webpack to build entry points
+// run webpack to build entries
 // -----------------------------------------------------------------------------
-function buildWebpackEntries(isHot) {
+function buildWebpackEntries(webpackOptions) {
   return new Promise((resolve, reject) => {
-    const webpackConfig = webpackConfigBuilder(stage);
-    if (!isHot) {
+    const webpackConfig = webpackConfigBuilder(webpackOptions);
+    if (webpackOptions.stage !== 'hot') {
       const bundler = webpack(webpackConfig);
       const bundle = (err, stats) => {
         if (err) {
@@ -55,100 +36,80 @@ function buildWebpackEntries(isHot) {
   });
 }
 
-function buildHome() {
-  const links = _.map(settings.apps, (appPath, appName) =>
-    `<a href="/${appName}">${appName}</a>`
-  );
-  const home = `<html><head></head><body>${links.join('')}</body></html>`;
-  file.write(path.join(rootBuildPath, 'index.html'), home);
-}
-
 // -----------------------------------------------------------------------------
 // main build
 // -----------------------------------------------------------------------------
-function build(isHot) {
+function build(rootBuildPath, webpackOptions, htmlOptions) {
+
   return new Promise((resolve) => {
 
-    // Delete everything in the output path
-    fs.emptydir(rootBuildPath, () => {
+    // Copy static files to build directory
+    try {
+      const staticDir = `${webpackOptions.appPath}/static`;
+      console.log(`Copying static files in ${staticDir}`);
+      fs.copySync(staticDir, rootBuildPath);
+    } catch (err) {
+      // No static dir. Do nothing
+    }
 
-      // Copy static files to build directory
-      _.each(settings.apps, (app) => {
-        try {
-          const staticDir = `${app}/static`;
-          console.log(`Copying static files in ${staticDir}`);
-          fs.copySync(staticDir, rootBuildPath);
-        } catch (err) {
-          // No static dir. Do nothing
-        }
-      });
+    // Webpack build
+    console.log(`Webpacking ${webpackOptions.appName}`);
 
-      // Build files
-      console.log('Building Javascript for all applications');
-      buildWebpackEntries(isHot).then((packResults) => {
-        let webpackAssets;
-        if (stage === 'production') {
-          webpackAssets = fs.readJsonSync(`${packResults.webpackConfig.output.path}/webpack-assets.json`);
-        }
+    buildWebpackEntries(webpackOptions).then((packResults) => {
+      let webpackAssets;
+      if (webpackOptions.stage === 'production') {
+        webpackAssets = fs.readJsonSync(`${packResults.webpackConfig.output.path}/webpack-assets.json`);
+      }
 
-        let pages = [];
+      // Build html
+      console.log(`Building html for ${webpackOptions.appName}`);
+      const inputPath = path.join(webpackOptions.appPath, 'html');
+      const templateDirs = _.map(htmlOptions.templateDirs,
+        templateDir => path.join(inputPath, templateDir)
+      );
 
-        // Build html for each application
-        _.each(settings.apps, (appPath, appName) => {
+      const pages = content.buildContents(
+        inputPath,
+        inputPath,
+        path.join(rootBuildPath, webpackOptions.appName),
+        webpackAssets,
+        webpackOptions.stage,
+        templateDirs,
+        htmlOptions
+      );
 
-          console.log(`Building html for: ${appName}`);
-
-          const inputPath = path.join(appPath, 'html');
-          const templateDirs = _.map(options.templateDirs,
-            templateDir => path.join(inputPath, templateDir)
-          );
-
-          pages = _.concat(pages, content.buildContents(
-            inputPath,
-            inputPath,
-            path.join(rootBuildPath, appName),
-            webpackAssets,
-            stage,
-            templateDirs,
-            options
-          ));
-        });
-
-        // Build a default home page
-        buildHome();
-
-        resolve({
-          webpackConfig : packResults.webpackConfig,
-          webpackAssets,
-          pages,
-        });
+      resolve({
+        webpackConfig : packResults.webpackConfig,
+        webpackAssets,
+        pages,
       });
     });
+
   });
 }
 
 // -----------------------------------------------------------------------------
 // watch
 // -----------------------------------------------------------------------------
-function appWatch(appPath, appName, buildResults) {
+function appWatch(rootBuildPath, webpackOptions, htmlOptions, buildResults) {
 
   // Watch for content to change
-  nodeWatch(appPath, { recursive: true }, (evt, filePath) => {
+  nodeWatch(webpackOptions.appPath, { recursive: true }, (evt, filePath) => {
 
-    const templateDirs = _.map(options.templateDirs,
-      templateDir => path.join(appPath, 'html', templateDir)
+    const templateDirs = _.map(htmlOptions.templateDirs,
+      templateDir => path.join(webpackOptions.appPath, 'html', templateDir)
     );
 
-    const outputPath = path.join(rootBuildPath, appName);
-    const originalInputPath = path.join(appPath, 'html');
+    const outputPath = path.join(rootBuildPath, webpackOptions.appName);
+    const originalInputPath = path.join(webpackOptions.appPath, 'html');
 
     // Build the page
     const page = content.buildContent(
       filePath,
       templateDirs,
       buildResults.webpackAssets,
-      stage,
-      options
+      webpackOptions.stage,
+      htmlOptions
     );
 
     page.outputFilePath = file.write(
@@ -159,12 +120,10 @@ function appWatch(appPath, appName, buildResults) {
   });
 }
 
-function watch() {
+function watch(rootBuildPath, webpackOptions, htmlOptions) {
   return new Promise((resolve) => {
-    build(true).then((buildResults) => {
-      _.each(settings.apps, (appPath, appName) => {
-        appWatch(appPath, appName, buildResults);
-      });
+    build(rootBuildPath, webpackOptions, htmlOptions).then((buildResults) => {
+      appWatch(rootBuildPath, webpackOptions, htmlOptions, buildResults);
       resolve();
     });
   });

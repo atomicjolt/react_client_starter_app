@@ -37,6 +37,8 @@ const apps = names.reduce(
   })
 , {});
 
+const rootAppsPath         = path.join(__dirname, '../../apps');
+
 module.exports = {
   devRelativeOutput,
   prodRelativeOutput,
@@ -52,6 +54,16 @@ module.exports = {
 
   buildSuffix: '_bundle.js',
 
-  apps
+  apps,
+
+  // Options for building html files
+  htmlOptions: {
+    truncateSummaryAt : 1000,
+    buildExtensions   : ['.html', '.htm', '.md', '.markdown'], // file types to build (others will just be copied)
+    templateDirs      : ['layouts'],
+    templateData      : {}, // Object that will be passed to every page as it is rendered
+    templateMap       : {}, // Used to specify specific templates on a per file basis
+    rootAppsPath
+  }
 
 };

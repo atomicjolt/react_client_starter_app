@@ -1,6 +1,4 @@
-// karma config info: http://karma-runner.github.io/0.12/config/configuration-file.html
-const webpack       = require('webpack');
-const webpackConfig = require('./webpack.config')('test');
+
 
 module.exports = () => {
   const testConfig = {
