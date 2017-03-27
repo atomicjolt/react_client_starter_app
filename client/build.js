@@ -4,4 +4,4 @@ const apps = require('./libs/build/apps');
 
 const stage = argv.release ? 'production' : 'development';
 
-apps.buildApps(stage, argv.onlyjs);
+apps.buildApps(stage, argv.onlyPack);

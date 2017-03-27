@@ -18,15 +18,15 @@ function rootBuildPath(stage) {
 // -----------------------------------------------------------------------------
 // Generates webpack options that can be provided to webpackConfigBuilder
 // -----------------------------------------------------------------------------
-function buildWebpackOptions(stage, appName, appPath) {
+function buildWebpackOptions(appName, appPath, options) {
   return {
-    stage,
+    stage: options.stage,
     appName,
     appPath,
     buildSuffix: settings.buildSuffix,
-    prodOutput: path.join(settings.prodOutput, appName),
+    prodOutput: options.onlyPack ? settings.prodOutput : path.join(settings.prodOutput, appName),
     prodAssetsUrl: settings.prodAssetsUrl,
-    devOutput: path.join(settings.devOutput, appName),
+    devOutput: options.onlyPack ? settings.devOutput : path.join(settings.devOutput, appName),
     devAssetsUrl: settings.devAssetsUrl,
     devRelativeOutput: settings.devRelativeOutput
   };
@@ -35,9 +35,9 @@ function buildWebpackOptions(stage, appName, appPath) {
 // -----------------------------------------------------------------------------
 // Iterate through all applications calling the callback with the webpackOptions
 // -----------------------------------------------------------------------------
-function iterateApps(stage, cb) {
+function iterateApps(options, cb) {
   _.each(settings.apps, (appPath, appName) => {
-    cb(buildWebpackOptions(stage, appName, appPath));
+    cb(buildWebpackOptions(appName, appPath, options));
   });
 }
 
@@ -65,8 +65,8 @@ function launchHotWrapper(launchCallback, webpackOptions) {
 // -----------------------------------------------------------------------------
 // Build a single app
 // -----------------------------------------------------------------------------
-function buildAppParts(webpackOptions, onlyjs) {
-  if (onlyjs) {
+function buildAppParts(webpackOptions, onlyPack) {
+  if (onlyPack) {
     build.buildWebpackEntries(webpackOptions).then(() => {
       console.log(`Finished Javascript for ${webpackOptions.appName}`);
     });
@@ -82,10 +82,10 @@ function buildAppParts(webpackOptions, onlyjs) {
 // -----------------------------------------------------------------------------
 // Build a single app
 // -----------------------------------------------------------------------------
-function buildApp(appName, stage, onlyjs, launchCallback) {
+function buildApp(appName, stage, onlyPack, launchCallback) {
   const appPath = _.find(settings.apps, (p, name) => appName === name);
-  const webpackOptions = buildWebpackOptions(stage, appName, appPath);
-  buildAppParts(webpackOptions, onlyjs);
+  const webpackOptions = buildWebpackOptions(appName, appPath, { stage, onlyPack });
+  buildAppParts(webpackOptions, onlyPack);
   if (launchCallback) {
     launchHotWrapper(launchCallback, webpackOptions);
   }
@@ -94,18 +94,18 @@ function buildApp(appName, stage, onlyjs, launchCallback) {
 // -----------------------------------------------------------------------------
 // Build all apps
 // -----------------------------------------------------------------------------
-function buildApps(stage, onlyjs, launchCallback) {
+function buildApps(stage, onlyPack, launchCallback) {
   // Delete everything in the output path
   fs.emptydir(rootBuildPath(stage), () => {
 
-    iterateApps(stage, (webpackOptions) => {
-      buildAppParts(webpackOptions, onlyjs, launchCallback);
+    iterateApps({ stage, onlyPack }, (webpackOptions) => {
+      buildAppParts(webpackOptions, onlyPack, launchCallback);
       if (launchCallback) {
         launchHotWrapper(launchCallback, webpackOptions);
       }
     });
 
-    if (!onlyjs) {
+    if (!onlyPack) {
       buildHome(rootBuildPath(stage));
     }
   });
