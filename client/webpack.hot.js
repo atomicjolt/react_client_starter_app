@@ -1,15 +1,17 @@
-const express              = require('express');
-const webpack              = require('webpack');
-const webpackMiddleware    = require('webpack-dev-middleware');
+const express = require('express');
+const webpack = require('webpack');
+const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-const path                 = require('path');
+const path = require('path');
+const argv = require('minimist')(process.argv.slice(2));
 
 const webpackConfigBuilder = require('./config/webpack.config');
-const clientApps           = require('./libs/build/apps');
+const clientApps = require('./libs/build/apps');
 
-const app                  = express();
+const app = express();
 
 const localIp = '0.0.0.0';
+const appName = argv._[0];
 
 function launch(webpackOptions, port, servePath) {
 
@@ -38,9 +40,13 @@ function launch(webpackOptions, port, servePath) {
       console.log(err);
       return;
     }
-    console.log(`Listening on: http://${localIp}:${port}${webpackConfig.output.publicPath}`);
+    console.log(`Listening on: http://${localIp}:${port}`);
     console.log(`Serving content from: ${servePath}`);
   });
 }
 
-clientApps.buildApps('hot', false, launch);
+if (appName) {
+  clientApps.buildApp(appName, 'hot', false, launch);
+} else {
+  clientApps.buildApps('hot', false, launch);
+}
