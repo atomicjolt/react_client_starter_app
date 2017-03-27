@@ -14,5 +14,8 @@
     "redux": "3.6.0",
     "superagent": "^3.5.0",
     "uuid": "3.0.1"
+  },
+  "devDependencies": {
+    "react-addons-test-utils": "^15.4.2"
   }
 }

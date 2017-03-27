@@ -113,5 +113,6 @@ function buildApps(stage, onlyPack, launchCallback) {
 
 module.exports = {
   buildApp,
-  buildApps
+  buildApps,
+  buildWebpackOptions
 };

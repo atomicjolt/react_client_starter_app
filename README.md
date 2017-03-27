@@ -26,9 +26,12 @@ Make sure to install git, npm and yarn before you start then:
 
   `yarn hot`
 
-then visit `http://localhost:8080/hello_world`
+then visit `http://localhost:8080`
 
-or run each application individually with
+Note that this will start up a server for each application, incrementing the port by one for
+each new application that is started.
+
+If you have multiple applications you can run them one at a time with the application name:
 
   `yarn hot hello_world`
 

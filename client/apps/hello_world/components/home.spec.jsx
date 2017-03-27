@@ -1,7 +1,7 @@
 import React        from 'react';
 import TestUtils    from 'react-addons-test-utils';
 import { Provider } from 'react-redux';
-import Helper       from '../../specs_support/helper';
+import Helper       from '../../../specs_support/helper';
 import Home         from './home';
 
 describe('home', () => {

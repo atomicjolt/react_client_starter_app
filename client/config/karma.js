@@ -1,7 +1,24 @@
+const _ = require('lodash');
 
+const settings = require('./settings');
+const webpackConfigBuilder = require('./webpack.config');
+const apps = require('../libs/build/apps');
 
 module.exports = () => {
-  const testConfig = {
+
+  let plugins = [];
+  let module = {};
+  let resolve = {};
+
+  _.each(settings.apps, (appPath, appName) => {
+    const webpackOptions = apps.buildWebpackOptions(appName, appPath, { stage: 'test', onlyPack: true });
+    const webpackConfig = webpackConfigBuilder(webpackOptions);
+    plugins = _.union(plugins, webpackConfig.plugins);
+    module = _.merge({}, resolve, webpackConfig.module);
+    resolve = _.merge({}, resolve, webpackConfig.resolve);
+  });
+
+  return {
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,
@@ -55,9 +72,9 @@ module.exports = () => {
     // Use istanbul-transformer post loader to generate code coverage report.
     webpack: {
       devtool : 'eval',
-      plugins : webpackConfig.plugins,
-      module  : webpackConfig.module,
-      resolve : webpackConfig.resolve,
+      plugins,
+      module,
+      resolve,
     },
 
     // Reduce the noise to the console
@@ -74,5 +91,4 @@ module.exports = () => {
       file : 'coverage.info',
     },
   };
-  return testConfig;
 };
