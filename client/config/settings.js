@@ -15,7 +15,7 @@ const prodOutput = path.join(__dirname, '../../build/prod', prodRelativeOutput);
                           // it could be the ssl version of your S3 bucket ie:
                           // https://s3.amazonaws.com/' + deployConfig.domain;
 
-const prodAssetsUrl = `https://s3.amazonaws.com/${deployConfig.domain}`;
+const prodAssetsUrl = ''// `https://s3.amazonaws.com/${deployConfig.domain}`;
 
 // There is a warning if the .env file is missing
 // This is fine in a production setting, where settings

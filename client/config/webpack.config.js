@@ -100,7 +100,8 @@ module.exports = function webpackConfig(options) {
       }),
       // Generate webpack-assets.json to map path to assets generated with hashed names
       new AssetsPlugin({
-        path: outputPath
+        path: outputPath,
+        fullPath: false
       }),
       extractCSS
     ]);

@@ -31,7 +31,10 @@ function buildWebpackEntries(webpackOptions) {
       };
       bundler.run(bundle);
     } else {
-      resolve(webpackConfig, null);
+      resolve({
+        webpackConfig,
+        webpackStats: null
+      });
     }
   });
 }
@@ -56,9 +59,10 @@ function build(rootBuildPath, webpackOptions, htmlOptions) {
     console.log(`Webpacking ${webpackOptions.appName}`);
 
     buildWebpackEntries(webpackOptions).then((packResults) => {
-      let webpackAssets;
-      if (webpackOptions.stage === 'production') {
-        webpackAssets = fs.readJsonSync(`${packResults.webpackConfig.output.path}/webpack-assets.json`);
+      let webpackAssets = null;
+      const webpackAssetsFilePath = `${packResults.webpackConfig.output.path}/webpack-assets.json`;
+      if (fs.existsSync(webpackAssetsFilePath)) {
+        webpackAssets = fs.readJsonSync(webpackAssetsFilePath);
       }
 
       // Build html
@@ -74,6 +78,7 @@ function build(rootBuildPath, webpackOptions, htmlOptions) {
         path.join(rootBuildPath, webpackOptions.appName),
         webpackAssets,
         webpackOptions.stage,
+        webpackOptions.buildSuffix,
         templateDirs,
         htmlOptions
       );

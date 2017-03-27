@@ -29,7 +29,7 @@ function outFilePath(page, outputPath, fullInputPath, originalInputPath) {
 // -----------------------------------------------------------------------------
 // build a single file
 // -----------------------------------------------------------------------------
-function buildContent(fullPath, templateDirs, webpackAssets, stage, options) {
+function buildContent(fullPath, templateDirs, webpackAssets, stage, buildSuffix, options) {
   const content     = fs.readFileSync(fullPath, 'utf8');
   const parsed      = frontMatter(content);
   const metadata    = parsed.attributes;
@@ -63,7 +63,7 @@ function buildContent(fullPath, templateDirs, webpackAssets, stage, options) {
   // Apply template
   data.content = html; // Pass in generated html
   html = templates.apply(data, fullPath, options.templateMap, templateDirs);
-  html = applyProduction(html, stage, webpackAssets, options.buildSuffix);
+  html = applyProduction(html, stage, webpackAssets, buildSuffix);
 
   return {
     title,
@@ -85,6 +85,7 @@ function buildContents(
   outputPath,
   webpackAssets,
   stage,
+  buildSuffix,
   templateDirs,
   options) {
 
@@ -103,6 +104,7 @@ function buildContents(
           outputPath,
           webpackAssets,
           stage,
+          buildSuffix,
           templateDirs,
           options
         ));
@@ -110,7 +112,13 @@ function buildContents(
 
         const ext = path.extname(fullInputPath);
         if (_.includes(options.buildExtensions, ext)) {
-          const page = buildContent(fullInputPath, templateDirs, webpackAssets, stage, options);
+          const page = buildContent(
+            fullInputPath,
+            templateDirs,
+            webpackAssets,
+            stage,
+            buildSuffix,
+            options);
           page.outputFilePath = file.write(
             outFilePath(page, outputPath, fullInputPath, originalInputPath), page.html, options);
           results.push(page);

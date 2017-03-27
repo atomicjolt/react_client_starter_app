@@ -26,12 +26,21 @@ Make sure to install git, npm and yarn before you start then:
 
   `yarn hot`
 
-then visit http://localhost:8080
+then visit `http://localhost:8080/hello_world`
+
+or run each application individually with
+
+  `yarn hot hello_world`
+
+then `visit http://localhost:8080`
 
 
 # Using the React Client Starter App
 -----------------------
-Source code lives in the client directory. Modify html and js files in that directory to build your application.
+The starter app is setup to serve multiple isolated client applications each with their own package.json. You will find
+an example "hello world" application in client/apps/hello_world
+Modify html and js files in that directory to build your application or copy paste that directory to build additional
+applications. The build process will automatically add a new webpack entry point for each folder in that directory.
 
 
 ## React.js
@@ -41,7 +50,7 @@ React code can be found in client/js. We use Redux and the React-Router.
 
 ## Html
 -----------
-All html files live in client/html. The build process will properly process ejs in any html files as well
+All html files live in client/apps/[app name]/html. The build process will properly process ejs in any html files as well
 as process markdown for files that end in .md. All front matter in .md files will be available to
 the ejs templates and will be used when generating html. For example, you can set a custom layout for the html
 file by setting `layout: custom_layout` in the front matter. See apps/hello_world/html/about.md for an example.
