@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 
-const settings = require('./config/settings.js');
+const settings = require('./config/settings');
 
 const app = express();
 const argv = require('minimist')(process.argv.slice(2));
