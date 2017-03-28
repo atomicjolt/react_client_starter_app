@@ -2,6 +2,9 @@
   "scripts": {
     "postinstall": "node node_modules/phantomjs-prebuilt/install.js && cd ./apps/hello_world && yarn"
   },
+   "dependencies": {
+    "superagent": "^3.5.0"
+  },
   "devDependencies": {
     "assets-webpack-plugin": "^3.5.1",
     "autoprefixer": "^6.7.7",
