@@ -111,6 +111,7 @@ function appSettings(name, port, options) {
     templateData: {}, // Object that will be passed to every page as it is rendered
     templateMap: {}, // Used to specify specific templates on a per file basis
     stage: options.stage,
+    shouldLint: options.shouldLint,
     buildSuffix,
     port,
     production: isProduction(options.stage),

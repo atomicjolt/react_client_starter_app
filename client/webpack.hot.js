@@ -15,6 +15,7 @@ const serverApp = express();
 const localIp = '0.0.0.0';
 const appName = _.trim(argv._[0]);
 const hotPack = argv.hotPack;
+const shouldLint = argv.lint;
 
 function setupMiddleware(app) {
 
@@ -52,7 +53,7 @@ function launch(app) {
   runServer(app.port, app.outputPath);
 }
 
-const options = { hotPack, stage: 'hot', onlyPack: false, port: settings.hotPort };
+const options = { hotPack, shouldLint, stage: 'hot', onlyPack: false, port: settings.hotPort };
 if (appName) {
   const result = clientApps.buildApp(appName, options);
   launch(result.app);
