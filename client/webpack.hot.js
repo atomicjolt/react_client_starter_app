@@ -17,27 +17,26 @@ const appName = _.trim(argv._[0]);
 const hotPack = argv.hotPack;
 const shouldLint = argv.lint;
 
-function setupMiddleware(app) {
+function setupMiddleware(apps) {
 
-  const webpackConfig = webpackConfigBuilder(app);
+  const webpackConfigs = _.map(apps, app => webpackConfigBuilder(app));
 
-  const compiler = webpack(webpackConfig);
+  const compiler = webpack(webpackConfigs);
+
   const webpackMiddlewareInstance = webpackMiddleware(compiler, {
     noInfo: true,
-    publicPath: webpackConfig.output.publicPath,
     watch: true,
     headers: { 'Access-Control-Allow-Origin': '*' }
   });
-
-  serverApp.use(express.static(app.outputPath));
   serverApp.use(webpackMiddlewareInstance);
   serverApp.use(webpackHotMiddleware(compiler));
-  serverApp.get('*', (req, res) => {
-    res.sendFile(path.join(app.outputPath, req.url));
-  });
 }
 
 function runServer(port, servePath) {
+  serverApp.use(express.static(servePath));
+  serverApp.get('*', (req, res) => {
+    res.sendFile(path.join(servePath, req.url));
+  });
   serverApp.listen(port, localIp, (err) => {
     if (err) {
       console.log(err);
@@ -49,20 +48,21 @@ function runServer(port, servePath) {
 }
 
 function launch(app) {
-  setupMiddleware(app);
+  setupMiddleware([app]);
   runServer(app.port, app.outputPath);
 }
 
-const options = { hotPack, shouldLint, stage: 'hot', onlyPack: false, port: settings.hotPort };
+const options = { hotPack, shouldLint, stage: 'hot', onlyPack: false, port: settings.hotPort, appPerPort: true };
+
 if (appName) {
   const result = clientApps.buildApp(appName, options);
   launch(result.app);
 } else if (hotPack) {
   options.onlyPack = true;
+  options.appPerPort = false;
   const results = clientApps.buildApps(options);
-  _.each(results, (result) => {
-    setupMiddleware(result.app);
-  });
+  const apps = _.map(results, result => result.app);
+  setupMiddleware(apps);
   runServer(settings.hotPort, settings.paths.devOutput);
 } else {
   _.each(clientApps.buildApps(options), (result) => {

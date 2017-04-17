@@ -25,7 +25,8 @@ const prodOutput = path.join(__dirname, '../../build/prod', prodRelativeOutput);
                           // https://s3.amazonaws.com/' + deployConfig.domain;
 
 const prodAssetsUrl = `https://s3.amazonaws.com/${deployConfig.domain}`;
-const devAssetsUrl = process.env.ASSETS_URL;
+
+const devAssetsUrl = `${process.env.ASSETS_URL}:${hotPort}`;
 
 // Get a list of all directories in the apps directory.
 // These will be used to generate the entries for webpack
@@ -77,7 +78,7 @@ function outputPaths(name, port, options) {
   // Public path indicates where the assets will be served from. In dev this will likely be
   // localhost or a local domain. In production this could be a CDN. In developerment this will
   // point to whatever public url is serving dev assets.
-  let publicPath = `${devAssetsUrl}:${port}${options.hotPack ? `/${name}` : ''}${devRelativeOutput}`;
+  let publicPath = `${devAssetsUrl}${devRelativeOutput}`;
 
   if (isProduction(options.stage)) {
     rootOutputPath = prodOutput;
@@ -94,6 +95,22 @@ function outputPaths(name, port, options) {
 }
 
 // -----------------------------------------------------------------------------
+// Generate settings needed for webpack
+// -----------------------------------------------------------------------------
+function webpackSettings(name, file, appPath, port, options) {
+  return {
+    name,
+    file,
+    path: appPath,
+    shouldLint: options.shouldLint,
+    stage: options.stage,
+    production: isProduction(options.stage),
+    buildSuffix,
+    port,
+  };
+}
+
+// -----------------------------------------------------------------------------
 // Generate all settings needed for a given application
 // -----------------------------------------------------------------------------
 function appSettings(name, port, options) {
@@ -103,20 +120,13 @@ function appSettings(name, port, options) {
   const staticPath = path.join(appPath, 'static');
 
   const app = _.merge({
-    name,
-    path: appPath,
-    file: 'app.jsx',
     htmlPath,
     staticPath,
     templateData: {}, // Object that will be passed to every page as it is rendered
     templateMap: {}, // Used to specify specific templates on a per file basis
-    stage: options.stage,
-    shouldLint: options.shouldLint,
-    buildSuffix,
-    port,
-    production: isProduction(options.stage),
     htmlOptions,
-  }, outputPaths(name, port, options));
+  }, webpackSettings(name, 'app.jsx', appPath, port, options),
+     outputPaths(name, port, options));
 
   app.templateDirs = templateDirs(app, ['layouts']);
   return {
@@ -125,17 +135,24 @@ function appSettings(name, port, options) {
 }
 
 // -----------------------------------------------------------------------------
-// Generates an app setting for all applications found in the client directory
+// Iterate a given directory to generate app or webpack settings
 // -----------------------------------------------------------------------------
-function apps(options) {
+function iterateDirAndPorts(dir, options, cb) {
   let port = options.port;
-  return fs.readdirSync(appsDir)
-    .filter(file => fs.statSync(path.join(appsDir, file)).isDirectory())
+  return fs.readdirSync(dir)
+    .filter(file => fs.statSync(path.join(dir, file)).isDirectory())
     .reduce((result, appName) => {
-      const app = appSettings(appName, port, options);
+      const app = cb(appName, port, options);
       port = options.appPerPort ? port + 1 : options.port;
       return _.merge(result, app);
     }, {});
+}
+
+// -----------------------------------------------------------------------------
+// Generates an app setting for all applications found in the client directory
+// -----------------------------------------------------------------------------
+function apps(options) {
+  return iterateDirAndPorts(appsDir, options, appSettings);
 }
 
 module.exports = {
