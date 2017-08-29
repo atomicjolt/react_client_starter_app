@@ -189,7 +189,7 @@ module.exports = function webpackConfig(app) {
     resolve,
     cache: true,
     devtool: app.production ? 'source-map' : 'cheap-module-eval-source-map', // https://webpack.js.org/configuration/devtool/
-    stats: { colors: true },
+    stats: 'minimal',
     plugins,
     module: { rules },
     devServer: {

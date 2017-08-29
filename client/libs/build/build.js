@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const _ = require('lodash');
-const webpack = require('webpack');
 const nodeWatch = require('node-watch');
 const exec = require('child_process').exec;
 
@@ -9,15 +8,12 @@ const webpackUtils = require('./webpack_utils');
 const log = require('./log');
 
 // Settings
-const webpackConfigBuilder = require('../../config/webpack.config');
 
 // -----------------------------------------------------------------------------
 // run webpack to build entries
 // -----------------------------------------------------------------------------
-function buildWebpackEntries(app) {
+function buildWebpackEntries(app, webpackCompiler) {
   return new Promise((resolve, reject) => {
-    const webpackConfig = webpackConfigBuilder(app);
-    const bundler = webpack(webpackConfig);
     const bundle = (err, stats) => {
       if (err) {
         log.error(`webpack error: ${err}`);
@@ -25,11 +21,10 @@ function buildWebpackEntries(app) {
       }
       // log.out(`webpack: ${stats.toString({ colors: true })}`);
       resolve({
-        webpackConfig,
         webpackStats: stats.toJson()
       });
     };
-    bundler.run(bundle);
+    webpackCompiler.run(bundle);
   });
 }
 
@@ -85,7 +80,7 @@ function buildHtml(app, webpackAssets) {
 // -----------------------------------------------------------------------------
 // main build
 // -----------------------------------------------------------------------------
-function build(app) {
+function build(app, webpackCompiler) {
 
   return new Promise((resolve) => {
 
@@ -100,7 +95,7 @@ function build(app) {
     // Webpack build
     log.out(`Webpacking ${app.name}`);
 
-    buildWebpackEntries(app).then((packResults) => {
+    buildWebpackEntries(app, webpackCompiler).then((packResults) => {
 
       _.each(packResults.webpackStats.errors, (error) => {
         log.error(error);
