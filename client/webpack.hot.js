@@ -22,6 +22,7 @@ function setupMiddleware(serverApp, apps) {
   const compiler = webpack(webpackConfigs);
 
   const webpackMiddlewareInstance = webpackMiddleware(compiler, {
+    quiet: true,
     noInfo: true,
     watch: true,
     headers: { 'Access-Control-Allow-Origin': '*' }
