@@ -4,6 +4,7 @@ const ExtractTextPlugin    = require('extract-text-webpack-plugin');
 const ChunkManifestPlugin  = require('chunk-manifest-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const AssetsPlugin         = require('assets-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const _                    = require('lodash');
 
 //
@@ -125,16 +126,19 @@ module.exports = function webpackConfig(app) {
     plugins = _.concat(plugins, [
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"', __DEV__: true }),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin()
+      new webpack.NoEmitOnErrorsPlugin(),
+      new FriendlyErrorsPlugin()
     ]);
   } else if (app.stage === 'development') {
     plugins = _.concat(plugins, [
-      new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"', __DEV__: true })
+      new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"', __DEV__: true }),
+      new FriendlyErrorsPlugin()
     ]);
   } else {
     plugins = [
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"', __DEV__: true }),
-      extractCSS
+      extractCSS,
+      new FriendlyErrorsPlugin()
     ];
   }
 
@@ -193,6 +197,7 @@ module.exports = function webpackConfig(app) {
     plugins,
     module: { rules },
     devServer: {
+      quiet: true,
       stats: {
         cached: false,
         exclude: [/node_modules[\\/]react(-router)?[\\/]/]

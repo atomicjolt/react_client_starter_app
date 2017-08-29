@@ -16,6 +16,7 @@ const shouldLint = argv.lint;
 
 function setupMiddleware(serverApp, compiler) {
   const webpackMiddlewareInstance = webpackMiddleware(compiler, {
+    quiet: true,
     noInfo: true,
     watch: true,
     headers: { 'Access-Control-Allow-Origin': '*' }
