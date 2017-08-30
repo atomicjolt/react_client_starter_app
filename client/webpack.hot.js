@@ -22,13 +22,13 @@ function setupMiddleware(serverApp, compiler) {
     headers: { 'Access-Control-Allow-Origin': '*' }
   });
   serverApp.use(webpackMiddlewareInstance);
-  // serverApp.use(webpackHotMiddleware(compiler, {
-  //   log: false,
-  //   heartbeat: 2000,
-  //   timeout: 20000,
-  //   reload: true
-  // }));
-
+  serverApp.use(webpackHotMiddleware(compiler, {
+    log: false,
+    heartbeat: 2000,
+    timeout: 20000,
+    reload: true
+  }));
+  webpackMiddlewareInstance.invalidate();
 }
 
 function runServer(serverApp, port, servePath) {

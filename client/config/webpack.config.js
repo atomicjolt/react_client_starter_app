@@ -197,12 +197,5 @@ module.exports = function webpackConfig(app) {
     stats: 'minimal',
     plugins,
     module: { rules },
-    devServer: {
-      quiet: true,
-      stats: {
-        cached: false,
-        exclude: [/node_modules[\\/]react(-router)?[\\/]/]
-      }
-    }
   };
 };
