@@ -19,6 +19,8 @@ const _                    = require('lodash');
 //      'staging' (Will result in same output as production but will output to /staging)
 //      'hot' (Development mode with hot reload)
 //      'test'
+const outputSourceMaps = true;
+
 module.exports = function webpackConfig(app) {
 
   const jsLoaders = ['babel-loader'];
@@ -26,12 +28,11 @@ module.exports = function webpackConfig(app) {
     jsLoaders.push('atomic-lint-loader');
   }
 
-  const isDevelopment = app.state === 'development' || app.state === 'hot';
   const cssLoaders = [
     {
       loader: 'css-loader',
       options: {
-        sourceMap: isDevelopment,
+        sourceMap: outputSourceMaps,
         includePaths: [
           `${app.path}/node_modules`
         ],
@@ -40,7 +41,7 @@ module.exports = function webpackConfig(app) {
       }
     }, {
       loader: 'postcss-loader',
-      options: { sourceMap: isDevelopment }
+      options: { sourceMap: outputSourceMaps }
     }
   ];
 
@@ -48,7 +49,7 @@ module.exports = function webpackConfig(app) {
     cssLoaders.unshift({
       loader: 'style-loader',
       options: {
-        sourceMap: isDevelopment,
+        sourceMap: outputSourceMaps,
       }
     });
   }
@@ -57,7 +58,7 @@ module.exports = function webpackConfig(app) {
   scssLoaders.push({
     loader: 'sass-loader',
     options: {
-      sourceMap: isDevelopment,
+      sourceMap: outputSourceMaps,
       includePaths: [
         `${app.path}/node_modules`
       ],
@@ -70,7 +71,7 @@ module.exports = function webpackConfig(app) {
   lessLoaders.push({
     loader: 'less-loader',
     options: {
-      sourceMap: isDevelopment,
+      sourceMap: outputSourceMaps,
       includePaths: [
         `${app.path}/node_modules`
       ]
@@ -125,8 +126,8 @@ module.exports = function webpackConfig(app) {
   } else if (app.stage === 'hot') {
     plugins = _.concat(plugins, [
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"development"', __DEV__: true }),
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin(),
+      // new webpack.HotModuleReplacementPlugin(),
+      // new webpack.NoEmitOnErrorsPlugin(),
       new FriendlyErrorsPlugin()
     ]);
   } else if (app.stage === 'development') {

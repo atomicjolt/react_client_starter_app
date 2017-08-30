@@ -7,27 +7,6 @@ const content = require('./content');
 const webpackUtils = require('./webpack_utils');
 const log = require('./log');
 
-// Settings
-
-// -----------------------------------------------------------------------------
-// run webpack to build entries
-// -----------------------------------------------------------------------------
-function buildWebpackEntries(app, webpackCompiler) {
-  return new Promise((resolve, reject) => {
-    const bundle = (err, stats) => {
-      if (err) {
-        log.error(`webpack error: ${err}`);
-        reject(err);
-      }
-      // log.out(`webpack: ${stats.toString({ colors: true })}`);
-      resolve({
-        webpackStats: stats.toJson()
-      });
-    };
-    webpackCompiler.run(bundle);
-  });
-}
-
 // -----------------------------------------------------------------------------
 // copy over static files to build directory
 // -----------------------------------------------------------------------------
@@ -80,46 +59,31 @@ function buildHtml(app, webpackAssets) {
 // -----------------------------------------------------------------------------
 // main build
 // -----------------------------------------------------------------------------
-function build(app, webpackCompiler) {
+function build(app) {
 
-  return new Promise((resolve) => {
-
-    if (fs.existsSync(app.staticPath)) {
-      // Copy static files to build directory
-      buildStatic(app);
-      if (app.stage === 'hot') {
-        watchStatic(app);
-      }
+  log.out(`Copying static files for ${app.name}`);
+  if (fs.existsSync(app.staticPath)) {
+    // Copy static files to build directory
+    buildStatic(app);
+    if (app.stage === 'hot') {
+      watchStatic(app);
     }
+  }
 
-    // Webpack build
-    log.out(`Webpacking ${app.name}`);
+  const webpackAssets = webpackUtils.loadWebpackAssets(app);
 
-    buildWebpackEntries(app, webpackCompiler).then((packResults) => {
+  // Build html
+  log.out(`Building html for ${app.name}`);
+  const pages = buildHtml(app, webpackAssets);
 
-      _.each(packResults.webpackStats.errors, (error) => {
-        log.error(error);
-      });
-
-      const webpackAssets = webpackUtils.loadWebpackAssets(app);
-
-      // Build html
-      log.out(`Building html for ${app.name}`);
-      const pages = buildHtml(app, webpackAssets);
-
-      resolve({
-        app,
-        webpackConfig : packResults.webpackConfig,
-        webpackAssets,
-        pages,
-      });
-    });
-
-  });
+  return {
+    app,
+    webpackAssets,
+    pages,
+  };
 }
 
 module.exports = {
   build,
   buildHtml,
-  buildWebpackEntries
 };

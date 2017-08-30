@@ -22,12 +22,12 @@ function setupMiddleware(serverApp, compiler) {
     headers: { 'Access-Control-Allow-Origin': '*' }
   });
   serverApp.use(webpackMiddlewareInstance);
-  serverApp.use(webpackHotMiddleware(compiler, {
-    log: false,
-    heartbeat: 2000,
-    timeout: 20000,
-    reload: true
-  }));
+  // serverApp.use(webpackHotMiddleware(compiler, {
+  //   log: false,
+  //   heartbeat: 2000,
+  //   timeout: 20000,
+  //   reload: true
+  // }));
 
 }
 
@@ -58,25 +58,22 @@ if (appName) {
   // Run a single app. Note that when using yarn hot in order to run a single
   // application you will need to type 'yarn hot -- --app=my-app'
   const result = clientApps.buildApp(appName, options);
-  result.buildPromise.then(() => launch(result.app, result.webpackCompiler));
+  launch(result.app, result.webpackCompiler);
 } else if (hotPack) {
   // Only run webpack. Do not run the rest of the build process
   options.onlyPack = true;
   options.rootOutput = true;
   options.appPerPort = false;
-  clientApps.buildApps(options).then((results) => {
-    const promises = _.map(results.apps, result => result.buildPromise);
-    const serverApp = express();
-    Promise.all(promises).then(() => {
-      setupMiddleware(serverApp, results.webpackCompiler);
-      runServer(serverApp, settings.hotPort, settings.paths.devOutput);
-    });
-  });
+  const results = clientApps.buildApps(options);
+  const serverApp = express();
+  setupMiddleware(serverApp, results.webpackCompiler);
+  runServer(serverApp, settings.hotPort, settings.paths.devOutput);
 } else {
   // Run and serve all applications
-  clientApps.buildApps(options).then((results) => {
-    _.each(results.apps, (result) => {
-      result.buildPromise.then(() => launch(result.app, results.webpackCompiler));
-    });
+  const results = clientApps.buildApps(options);
+  // results.webpackCompiler.run(() => {
+  _.each(results.apps, (app) => {
+    launch(app, results.webpackCompiler);
   });
+  // });
 }

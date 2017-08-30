@@ -10,20 +10,13 @@ const webpackConfigBuilder = require('../../config/webpack.config');
 // -----------------------------------------------------------------------------
 // Build a single app
 // -----------------------------------------------------------------------------
-function buildAppParts(app, webpackCompiler, onlyPack) {
-  if (onlyPack) {
-    const buildPromise = build.buildWebpackEntries(app, webpackCompiler);
-    buildPromise.then(() => {
-      log.out(`Finished Javascript for ${app.name}`);
-    });
-    return buildPromise;
+function buildAppParts(app, onlyPack) {
+  if (!onlyPack) {
+    const result = build.build(app);
+    log.out(`Built ${result.pages.length} html pages for ${app.name}.`);
+    log.out(`Finished building ${app.name}.`);
   }
-  const buildPromise = build.build(app, webpackCompiler);
-  buildPromise.then((result) => {
-    log.out(`Finished Javascript for ${app.name}.`);
-    log.out(`Built ${result.pages.length} pages.`);
-  });
-  return buildPromise;
+  return app;
 }
 
 // -----------------------------------------------------------------------------
@@ -37,36 +30,18 @@ function buildApp(appName, options) {
   if (!options.noClean) {
     fs.emptyDirSync(app.outputPath);
   }
+
   return {
-    app,
-    buildPromise: buildAppParts(app, webpackCompiler, options.onlyPack),
+    app: buildAppParts(app, options.onlyPack),
     webpackCompiler,
   };
 }
 
 // -----------------------------------------------------------------------------
-// Build apps in order one at a time
-// -----------------------------------------------------------------------------
-function buildAppWait(app, webpackCompiler, options) {
-  return new Promise((resolve) => {
-    const buildPromise = buildAppParts(app, webpackCompiler, options.onlyPack);
-    buildPromise.then(() => {
-      resolve({
-        app,
-        buildPromise
-      });
-    });
-  });
-}
-
-// -----------------------------------------------------------------------------
 // Build all apps
 // -----------------------------------------------------------------------------
-async function buildApps(options) {
+function buildApps(options) {
   const apps = settings.apps(options);
-
-  const webpackConfigs = _.map(apps, app => webpackConfigBuilder(app));
-  const webpackCompiler = webpack(webpackConfigs);
 
   // Clean dirs
   if (!options.noClean) {
@@ -75,25 +50,17 @@ async function buildApps(options) {
     });
   }
 
-  if (options.order) {
-    const results = [];
-    for (let i = 0; i < options.order.length; i += 1) {
-      const appName = options.order[i];
-      results.push(await buildAppWait(apps[appName], webpackCompiler, options));
-    }
-    return results;
-  }
-
-  const builtApps = _.map(apps, app => ({
-    app,
-    buildPromise: buildAppParts(app, webpackCompiler, options.onlyPack),
-  }));
+  const webpackConfigs = _.map(apps, app => webpackConfigBuilder(app));
+  const webpackCompiler = webpack(webpackConfigs, (...args) => {
+    log.out('Finished Webpacking all applications');
+    _.each(args.errors, error => log.error(error));
+    _.each(apps, app => buildAppParts(app, options.onlyPack));
+  });
 
   return {
-    apps: builtApps,
+    apps,
     webpackCompiler,
   };
-
 }
 
 module.exports = {
