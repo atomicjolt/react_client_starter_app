@@ -6,7 +6,6 @@ const webpackMiddleware = require('webpack-dev-middleware');
 const path = require('path');
 const argv = require('minimist')(process.argv.slice(2));
 const settings = require('./config/settings');
-const log = require('./libs/build/log');
 const clientApps = require('./libs/build/apps');
 
 const localIp = '0.0.0.0';
