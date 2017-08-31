@@ -28,7 +28,7 @@ function setupMiddleware(serverApp, compiler) {
     timeout: 20000,
     reload: true
   }));
-  webpackMiddlewareInstance.invalidate();
+  // webpackMiddlewareInstance.invalidate();
 }
 
 function runServer(serverApp, port, servePath) {
@@ -71,9 +71,9 @@ if (appName) {
 } else {
   // Run and serve all applications
   const results = clientApps.buildApps(options);
-  results.webpackCompiler.run(() => {
+  // results.webpackCompiler.run(() => {
   _.each(results.apps, (app) => {
     launch(app, results.webpackCompiler);
   });
-  });
+  // });
 }
