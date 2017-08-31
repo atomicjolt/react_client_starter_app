@@ -71,9 +71,9 @@ if (appName) {
 } else {
   // Run and serve all applications
   const results = clientApps.buildApps(options);
-  // results.webpackCompiler.run(() => {
+  results.webpackCompiler.run(() => {
   _.each(results.apps, (app) => {
     launch(app, results.webpackCompiler);
   });
-  // });
+  });
 }
