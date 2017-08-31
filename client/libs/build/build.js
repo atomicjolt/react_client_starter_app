@@ -5,13 +5,12 @@ const exec = require('child_process').exec;
 
 const content = require('./content');
 const webpackUtils = require('./webpack_utils');
-const log = require('./log');
 
 // -----------------------------------------------------------------------------
 // copy over static files to build directory
 // -----------------------------------------------------------------------------
-function buildStatic(app) {
-  log.out(`Copying static files in ${app.staticPath}`);
+function buildStatic(app, logger = () => {}) {
+  logger('info', 'COPYING', `Copying static files in ${app.staticPath}`);
   exec(`cp -r ${app.staticPath}/. ${app.outputPath}`);
 }
 
@@ -19,10 +18,10 @@ function buildStatic(app) {
 // watchStatic
 // Used to copy over static files if they change
 // -----------------------------------------------------------------------------
-function watchStatic(app) {
-  log.out(`Watching static files in ${app.staticPath}`);
+function watchStatic(app, logger = () => {}) {
+  logger('info', 'WATCHING', `Watching static files in ${app.staticPath}`);
   nodeWatch(app.staticPath, { recursive: true }, (evt, filePath) => {
-    log.out(`Change in static file ${filePath}`);
+    logger('info', 'CHANGE', `Change in static file ${filePath}`);
     fs.copySync(filePath, app.outputPath);
   });
 }
@@ -31,18 +30,19 @@ function watchStatic(app) {
 // watchHtml
 // Used to rebuild html or templates if files change.
 // -----------------------------------------------------------------------------
-function watchHtml(webpackAssets, app) {
-  log.out(`Watching html files in ${app.htmlPath}`);
+function watchHtml(webpackAssets, app, logger = () => {}) {
+  logger('info', 'WATCHING', `Watching html files in ${app.htmlPath}`);
   nodeWatch(app.htmlPath, { recursive: true }, (evt, fullInputPath) => {
-    log.out(`Change in html file ${fullInputPath}`);
+    logger('info', 'CHANGE', `Change in html file ${fullInputPath}`);
     content.writeContent(
       fullInputPath,
       webpackAssets,
-      app);
+      app
+    );
   });
 }
 
-function buildHtml(app, webpackAssets) {
+function buildHtml(app, webpackAssets, logger = () => {}) {
   const pages = content.buildContents(
     app.htmlPath,
     app,
@@ -50,7 +50,7 @@ function buildHtml(app, webpackAssets) {
   );
 
   if (app.stage === 'hot' && fs.existsSync(app.htmlPath)) {
-    watchHtml(webpackAssets, app);
+    watchHtml(webpackAssets, app, logger);
   }
 
   return pages;
@@ -59,22 +59,22 @@ function buildHtml(app, webpackAssets) {
 // -----------------------------------------------------------------------------
 // main build
 // -----------------------------------------------------------------------------
-function build(app) {
+function build(app, logger = () => {}) {
 
-  log.out(`Copying static files for ${app.name}`);
+  logger('info', 'COPYING', `Copying static files for ${app.name}`);
   if (fs.existsSync(app.staticPath)) {
     // Copy static files to build directory
-    buildStatic(app);
+    buildStatic(app, logger);
     if (app.stage === 'hot') {
-      watchStatic(app);
+      watchStatic(app, logger);
     }
   }
 
   const webpackAssets = webpackUtils.loadWebpackAssets(app);
 
   // Build html
-  log.out(`Building html for ${app.name}`);
-  const pages = buildHtml(app, webpackAssets);
+  logger('info', 'BUILDING', `Building html for ${app.name}`);
+  const pages = buildHtml(app, webpackAssets, logger);
 
   return {
     app,

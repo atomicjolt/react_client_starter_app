@@ -1,5 +1,5 @@
 const build = require('../build/build');
-const log = require('../build/log');
+const output = require('friendly-errors-webpack-plugin/src/output');
 
 class HtmlBuilderPlugin {
   constructor(app, options) {
@@ -10,9 +10,8 @@ class HtmlBuilderPlugin {
 
   buildAppParts() {
     if (!this.options.onlyPack) {
-      const result = build.build(this.app);
-      log.out(`Built ${result.pages.length} html pages for ${this.app.name}.`);
-      log.out(`Finished building ${this.app.name}.`);
+      const result = build.build(this.app, (...args) => output.title(...args));
+      output.title('info', 'BUILD', `Built ${result.pages.length} html pages for ${this.app.name}.`);
     }
   }
 
@@ -21,8 +20,13 @@ class HtmlBuilderPlugin {
       // we kick off the initial build but then handle the watching and
       // rebuilding of the html ourselves
       if (this.shouldBuild) {
-        this.buildAppParts();
-        this.shouldBuild = false;
+        try {
+          this.buildAppParts();
+          this.shouldBuild = false;
+          output.title('success', 'DONE', `Finished compiling html for ${this.app.name}`);
+        } catch (err) {
+          output.title('error', 'ERROR', err);
+        }
       }
     });
   }
