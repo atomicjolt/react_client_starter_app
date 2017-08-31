@@ -2,11 +2,11 @@ const _ = require('lodash');
 const express = require('express');
 
 const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
+// const webpackHotMiddleware = require('webpack-hot-middleware');
 const path = require('path');
 const argv = require('minimist')(process.argv.slice(2));
 const settings = require('./config/settings');
-
+const log = require('./libs/build/log');
 const clientApps = require('./libs/build/apps');
 
 const localIp = '0.0.0.0';
@@ -22,13 +22,12 @@ function setupMiddleware(serverApp, compiler) {
     headers: { 'Access-Control-Allow-Origin': '*' }
   });
   serverApp.use(webpackMiddlewareInstance);
-  serverApp.use(webpackHotMiddleware(compiler, {
-    log: false,
-    heartbeat: 2000,
-    timeout: 20000,
-    reload: true
-  }));
-  // webpackMiddlewareInstance.invalidate();
+  // serverApp.use(webpackHotMiddleware(compiler, {
+  //   log: (data) => { log.out(data); },
+  //   heartbeat: 2000,
+  //   timeout: 20000,
+  //   reload: true
+  // }));
 }
 
 function runServer(serverApp, port, servePath) {

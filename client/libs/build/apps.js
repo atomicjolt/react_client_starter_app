@@ -25,14 +25,14 @@ function buildAppParts(app, onlyPack) {
 function buildApp(appName, options) {
   const apps = settings.apps(options);
   const app = _.find(apps, (e, name) => appName === name);
-  const webpackCompiler = webpack(webpackConfigBuilder(app));
+  const webpackCompiler = webpack(webpackConfigBuilder(app, options));
 
   if (!options.noClean) {
     fs.emptyDirSync(app.outputPath);
   }
 
   return {
-    app: buildAppParts(app, options.onlyPack),
+    app,
     webpackCompiler,
   };
 }
@@ -50,12 +50,8 @@ function buildApps(options) {
     });
   }
 
-  const webpackConfigs = _.map(apps, app => webpackConfigBuilder(app));
-  const webpackCompiler = webpack(webpackConfigs, (...args) => {
-    log.out('Finished Webpacking all applications');
-    _.each(args.errors, error => log.error(error));
-    _.each(apps, app => buildAppParts(app, options.onlyPack));
-  });
+  const webpackConfigs = _.map(apps, app => webpackConfigBuilder(app, options));
+  const webpackCompiler = webpack(webpackConfigs);
 
   return {
     apps,
