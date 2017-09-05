@@ -1,23 +1,8 @@
 const fs = require('fs-extra');
 const _ = require('lodash');
 const webpack = require('webpack');
-
 const settings = require('../../config/settings');
-const build = require('./build');
-const log = require('./log');
 const webpackConfigBuilder = require('../../config/webpack.config');
-
-// -----------------------------------------------------------------------------
-// Build a single app
-// -----------------------------------------------------------------------------
-function buildAppParts(app, onlyPack) {
-  if (!onlyPack) {
-    const result = build.build(app);
-    log.out(`Built ${result.pages.length} html pages for ${app.name}.`);
-    log.out(`Finished building ${app.name}.`);
-  }
-  return app;
-}
 
 // -----------------------------------------------------------------------------
 // Build a single app
