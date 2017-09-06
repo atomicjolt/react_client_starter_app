@@ -4,6 +4,16 @@ const webpack = require('webpack');
 const settings = require('../../config/settings');
 const webpackConfigBuilder = require('../../config/webpack.config');
 
+// clean up old build
+function clean(apps, options) {
+  // Clean dirs
+  if (!options.noClean) {
+    _.each(apps, (app) => {
+      fs.emptyDirSync(app.outputPath);
+    });
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Build a single app
 // -----------------------------------------------------------------------------
@@ -12,9 +22,7 @@ function buildApp(appName, options) {
   const app = _.find(apps, (e, name) => appName === name);
   const webpackCompiler = webpack(webpackConfigBuilder(app, options));
 
-  if (!options.noClean) {
-    fs.emptyDirSync(app.outputPath);
-  }
+  clean([app], options);
 
   return {
     app,
@@ -22,19 +30,21 @@ function buildApp(appName, options) {
   };
 }
 
+function buildAppsForMultipleServers(options) {
+  const apps = settings.apps(options);
+  clean(apps, options);
+  return _.map(apps, app => ({
+    app,
+    webpackCompiler: webpack(webpackConfigBuilder(app, options)),
+  }));
+}
+
 // -----------------------------------------------------------------------------
 // Build all apps
 // -----------------------------------------------------------------------------
-function buildApps(options) {
+function buildAppsForOneServer(options) {
   const apps = settings.apps(options);
-
-  // Clean dirs
-  if (!options.noClean) {
-    _.each(apps, (app) => {
-      fs.emptyDirSync(app.outputPath);
-    });
-  }
-
+  clean(apps, options);
   const webpackConfigs = _.map(apps, app => webpackConfigBuilder(app, options));
   const webpackCompiler = webpack(webpackConfigs);
 
@@ -46,5 +56,6 @@ function buildApps(options) {
 
 module.exports = {
   buildApp,
-  buildApps
+  buildAppsForMultipleServers,
+  buildAppsForOneServer
 };

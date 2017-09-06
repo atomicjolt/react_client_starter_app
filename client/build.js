@@ -12,7 +12,7 @@ const options = {
   rootOutput: argv.rootOutput
 };
 
-apps.buildApps(options).webpackCompiler.run((err) => {
+apps.buildAppsForOneServer(options).webpackCompiler.run((err) => {
   if (err) {
     log.error(err);
   }

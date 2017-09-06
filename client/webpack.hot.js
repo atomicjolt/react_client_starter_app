@@ -62,16 +62,16 @@ if (appName) {
   options.onlyPack = true;
   options.rootOutput = true;
   options.appPerPort = false;
-  const results = clientApps.buildApps(options);
+  const results = clientApps.buildAppsForOneServer(options);
   const serverApp = express();
   setupMiddleware(serverApp, results.webpackCompiler);
   runServer(serverApp, settings.hotPort, settings.paths.devOutput);
 } else {
   // Run and serve all applications
-  const results = clientApps.buildApps(options);
+  const results = clientApps.buildAppsForMultipleServers(options);
   // results.webpackCompiler.run(() => {
-  _.each(results.apps, (app) => {
-    launch(app, results.webpackCompiler);
+  _.each(results, (result) => {
+    launch(result.app, result.webpackCompiler);
   });
   // });
 }
