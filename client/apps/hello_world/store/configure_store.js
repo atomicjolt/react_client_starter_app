@@ -1,4 +1,4 @@
-import configureStore from '../../../libs/store/configure_store';
+import configureStore from 'atomic-reactor/libs/store/configure_store';
 import rootReducer    from '../reducers/index';
 import API            from '../middleware/api';
 
