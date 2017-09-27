@@ -1,6 +1,7 @@
 {
   "scripts": {
     "test": "./node_modules/jest/bin/jest.js --config=config/jest_config.json",
+    "test_debug": "node debug ./node_modules/jest/bin/jest.js --runInBand --config=config/jest_config.json",
     "watch": "./node_modules/jest/bin/jest.js --config=config/jest_config.json --watch",
     "postinstall": "node node_modules/phantomjs-prebuilt/install.js && for dir in apps/*; do cd \"$dir\" || continue; yarn; cd ..; cd ..; done",
     "nuke": "rm -rf node_modules && for dir in apps/*; do cd \"$dir\" || continue; rm -rf node_modules; cd ..; cd ..; done"
