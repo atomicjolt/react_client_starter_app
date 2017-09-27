@@ -7,9 +7,9 @@
   "homepage": "https://github.com/atomicjolt/react_client_starter_app",
   "scripts": {
     "postinstall": "cd ./client && yarn",
-    "test": "cd ./client && for dir in apps/*; do cd \"$dir\" || continue; yarn test; cd ..; cd ..; done && yarn test",
-    "test_debug": "cd ./client && for dir in apps/*; do cd \"$dir\" || continue; node debug ./node_modules/jest/bin/jest --runInBand --config=config/jest_config.json; cd ..; cd ..; done",
-    "watch": "cd ./client && for dir in apps/*; do cd \"$dir\" || continue; yarn watch; cd ..; cd ..; done",
+    "test": "cd ./client && yarn test",
+    "test_debug": "cd ./client && yarn test_debug",
+    "watch": "cd ./client && yarn watch",
     "hot": "cd ./client && node webpack.hot.js",
     "hot_pack": "cd ./client && node webpack.hot.js --hotPack",
     "hot_lint": "cd ./client && node webpack.hot.js --hotPack --lint",
