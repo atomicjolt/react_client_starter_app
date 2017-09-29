@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import DevTools from 'atomic-reactor/libs/dev/dev_tools';
-import { getInitialSettings } from 'atomic-reactor/libs/reducers/settings';
-import jwt from 'atomic-reactor/libs/loaders/jwt';
+import DevTools from 'atomic-fuel/libs/dev/dev_tools';
+import { getInitialSettings } from 'atomic-fuel/libs/reducers/settings';
+import jwt from 'atomic-fuel/libs/loaders/jwt';
 
 import configureStore from './store/configure_store';
 import routes from './routes';
