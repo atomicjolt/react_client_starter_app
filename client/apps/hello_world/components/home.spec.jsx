@@ -1,7 +1,7 @@
 import React        from 'react';
 import TestUtils    from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
-import Helper       from 'atomic-reactor/specs_support/helper';
+import Helper       from 'atomic-fuel/libs/specs_support/helper';
 
 import Home         from './home';
 
