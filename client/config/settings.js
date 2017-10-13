@@ -22,8 +22,8 @@ const prodOutput = path.join(__dirname, '../../build/prod', prodRelativeOutput);
                           // it could be the ssl version of your S3 bucket ie:
                           // https://s3.amazonaws.com/' + deployConfig.domain;
 // For local testing set prodAssetsUrl to process.env.ASSETS_URL
-// const prodAssetsUrl = `${process.env.ASSETS_URL}:${process.env.ASSETS_PORT}`;
-const prodAssetsUrl = `https://s3.amazonaws.com/${deployConfig.domain}`;
+const prodAssetsUrl = `${process.env.ASSETS_URL}:${process.env.ASSETS_PORT}`;
+// const prodAssetsUrl = `https://s3.amazonaws.com/${deployConfig.domain}`;
 
 const devAssetsUrl = process.env.ASSETS_URL;
 

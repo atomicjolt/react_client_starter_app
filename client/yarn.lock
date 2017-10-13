@@ -132,13 +132,13 @@ ansi-html@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ansi-html/-/ansi-html-0.0.7.tgz#813584021962a9e9e6fd039f940d12f56ca7859e"
 
-ansi-regex@*, ansi-regex@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-3.0.0.tgz#ed0317c322064f79466c02966bddb605ab37d998"
-
 ansi-regex@^2.0.0, ansi-regex@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-2.1.1.tgz#c3b33ab5ee360d86e0e628f0468ae7ef27d654df"
+
+ansi-regex@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-3.0.0.tgz#ed0317c322064f79466c02966bddb605ab37d998"
 
 ansi-styles@^2.2.1:
   version "2.2.1"
@@ -370,6 +370,10 @@ atomic-lint-loader@^1.0.1:
   resolved "https://registry.yarnpkg.com/atomic-lint-loader/-/atomic-lint-loader-1.0.1.tgz#da6877bd7e8a7e8efd86fd4808c6ee14935d3078"
   dependencies:
     lodash "^4.17.4"
+
+atomic-reactor@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/atomic-reactor/-/atomic-reactor-1.0.1.tgz#33703ff09d66eab315c31decb2bfb5426655c558"
 
 autoprefixer@^6.3.1:
   version "6.7.7"
@@ -3877,7 +3881,7 @@ imports-loader@^0.7.1:
     loader-utils "^1.0.2"
     source-map "^0.5.6"
 
-imurmurhash@*, imurmurhash@^0.1.4:
+imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
 
