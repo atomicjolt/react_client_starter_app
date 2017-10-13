@@ -21,7 +21,9 @@
     "ball": "node ./client/node_modules/atomic-reactor/build.js --release && ./client/node_modules/s3-website/s3-website.js create",
     "release": "node ./client/node_modules/atomic-reactor/build.js --release && ./client/node_modules/s3-website/s3-website.js deploy",
     "lint": "cd ./client && eslint js",
-    "nuke": "rm -rf node_modules && cd ./client && yarn nuke"
+    "nuke": "rm -rf node_modules && cd ./client && yarn nuke",
+    "inspect_reactor": "\"${EDITOR:-vi}\" ./client/node_modules/atomic-reactor",
+    "inspect_fuel": "\"${EDITOR:-vi}\" ./client/apps/hello_world/node_modules/atomic-fuel"
   },
   "repository": {
     "type": "git",
