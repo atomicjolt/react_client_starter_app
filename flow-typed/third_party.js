@@ -1,5 +1,5 @@
-declare module "babel-polyfill" {}
+// declare module "babel-polyfill" {}
 
-declare module "react-redux" {
-  declare module.exports :any
-}
+// declare module "react-redux" {
+//   declare module.exports :any
+// }
