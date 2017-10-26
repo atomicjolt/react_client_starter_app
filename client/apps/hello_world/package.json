@@ -6,8 +6,8 @@
   "dependencies": {
     "atomic-fuel": "^1.0.3",
     "babel": "^6.23.0",
-    "babel-polyfill": "^6.23.0",
-    "babel-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-runtime": "^6.26.0",
     "es6-promise": "^4.1.0",
     "lodash": "4.17.4",
     "prop-types": "^15.6.0",
