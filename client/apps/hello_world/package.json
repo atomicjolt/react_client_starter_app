@@ -8,7 +8,7 @@
     "babel": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
-    "es6-promise": "^4.1.0",
+    "es6-promise": "^4.1.1",
     "lodash": "4.17.4",
     "prop-types": "^15.6.0",
     "react": "^15.5.4",
