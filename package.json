@@ -34,9 +34,5 @@
   ],
   "dependencies": {
     "del": "^3.0.0"
-  },
-  "devDependencies": {
-    "jest": "^21.2.1",
-    "nock": "^9.0.25"
   }
 }
