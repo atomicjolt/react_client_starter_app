@@ -52,6 +52,9 @@ const paths = {
   appsDir,
 };
 
+const templateData = {}; // Object that will be passed to every page as it is rendered
+const templateMap = {}; // Used to specify specific templates on a per file basis
+
 module.exports = {
   paths,
   hotPort,
@@ -59,4 +62,6 @@ module.exports = {
   prodOutput,
   buildSuffix,
   htmlOptions,
+  templateData,
+  templateMap
 };
