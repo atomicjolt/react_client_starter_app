@@ -295,7 +295,7 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-atomic-reactor@^1.0.1:
+atomic-reactor@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/atomic-reactor/-/atomic-reactor-1.0.3.tgz#97612d46a917bdbeef7fb3630c73d3a2d51befb8"
   dependencies:
@@ -2223,7 +2223,7 @@ entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-enzyme-adapter-react-15@^1.0.2:
+enzyme-adapter-react-15@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/enzyme-adapter-react-15/-/enzyme-adapter-react-15-1.0.5.tgz#99f9a03ff2c2303e517342935798a6bdfbb75fac"
   dependencies:
@@ -2241,7 +2241,7 @@ enzyme-adapter-utils@^1.1.0:
     object.assign "^4.0.4"
     prop-types "^15.5.10"
 
-enzyme@^3.1.0:
+enzyme@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.2.0.tgz#998bdcda0fc71b8764a0017f7cc692c943f54a7a"
   dependencies:
@@ -4825,7 +4825,7 @@ nock@^9.0.14:
     qs "^6.0.2"
     semver "^5.3.0"
 
-nock@^9.0.25:
+nock@^9.1.0:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/nock/-/nock-9.1.0.tgz#b6fd783abc1e774cb028058ea81207369a735747"
   dependencies:
@@ -5301,7 +5301,7 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
 
-phantomjs-prebuilt@^2.1.14:
+phantomjs-prebuilt@^2.1.16:
   version "2.1.16"
   resolved "https://registry.yarnpkg.com/phantomjs-prebuilt/-/phantomjs-prebuilt-2.1.16.tgz#efd212a4a3966d3647684ea8ba788549be2aefef"
   dependencies:
@@ -6607,7 +6607,7 @@ sugarss@^1.0.0:
   dependencies:
     postcss "^6.0.0"
 
-superagent@^3.8.0:
+superagent@^3.8.1:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/superagent/-/superagent-3.8.1.tgz#2571fd921f3fcdba43ac68c3b35c91951532701f"
   dependencies:
