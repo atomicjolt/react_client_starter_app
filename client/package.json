@@ -11,7 +11,7 @@
     "superagent": "^3.8.2"
   },
   "devDependencies": {
-    "atomic-reactor": "^1.1.6",
+    "atomic-reactor": "^1.1.8",
     "dotenv": "4.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
