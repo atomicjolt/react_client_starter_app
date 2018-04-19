@@ -321,9 +321,9 @@ atob@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.0.3.tgz#19c7a760473774468f20b2d2d03372ad7d4cbf5d"
 
-atomic-fuel@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/atomic-fuel/-/atomic-fuel-1.2.5.tgz#d6f84230e5475588855938a9a62877aeb504788f"
+atomic-fuel@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/atomic-fuel/-/atomic-fuel-1.3.0.tgz#49bc0e808223a07ba33df512d2f358ff66e0443f"
   dependencies:
     atomic-reactor "^1.1.2"
     babel-cli "^6.26.0"
@@ -352,7 +352,7 @@ atomic-fuel@^1.2.5:
     jasmine-core "^2.6.2"
     jest "^21.2.1"
     lodash "^4.17.4"
-    mime "^2.0.3"
+    mime "^1.4.1"
     nock "^9.1.4"
     prop-types "^15.5.10"
     react "^15.5.4"
@@ -5019,10 +5019,6 @@ mime@1.4.1:
 mime@^1.2.11, mime@^1.3.4, mime@^1.4.1, mime@^1.5.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
-
-mime@^2.0.3:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/mime/-/mime-2.2.0.tgz#161e541965551d3b549fa1114391e3a3d55b923b"
 
 mimic-fn@^1.0.0:
   version "1.2.0"

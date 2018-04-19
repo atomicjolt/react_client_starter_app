@@ -20,7 +20,7 @@ export class Errors extends React.Component {
   }
 
   render() {
-    const errors = _.map(this.props.errors, error => <li>{error}</li>);
+    const errors = _.map(this.props.errors, error => <li>{error.message}</li>);
     return <ul>{errors}</ul>;
   }
 }
