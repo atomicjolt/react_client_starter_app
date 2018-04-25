@@ -7,6 +7,7 @@
         ["transform-decorators-legacy"],
         ["transform-class-properties"],
         ["babel-plugin-rewire"],
+        ["transform-react-jsx-source"],
       ],
       "ignore": [
         "node_modules",
@@ -17,6 +18,7 @@
         ["transform-runtime"],
         ["transform-decorators-legacy"],
         ["transform-class-properties"],
+        ["transform-react-jsx-source"],
       ],
       "ignore": [
         "node_modules",
@@ -28,6 +30,7 @@
         ["transform-decorators-legacy"],
         ["transform-class-properties"],
         ["react-hot-loader/babel"],
+        ["transform-react-jsx-source"],
       ],
       "ignore": [
         "node_modules",

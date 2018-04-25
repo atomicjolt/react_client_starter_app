@@ -414,11 +414,11 @@ atomic-canvas@^1.1.2:
     cli-highlight "^1.1.4"
     lodash "^4.17.4"
 
-atomic-fuel@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/atomic-fuel/-/atomic-fuel-1.3.0.tgz#49bc0e808223a07ba33df512d2f358ff66e0443f"
+atomic-fuel@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/atomic-fuel/-/atomic-fuel-1.3.2.tgz#227217ac49e65aceb9a88dfa9f8e1242ce3b69ed"
   dependencies:
-    atomic-reactor "^1.1.2"
+    atomic-reactor "^1.1.9"
     babel-cli "^6.26.0"
     babel-core "^6.26.0"
     babel-eslint "^7.2.3"
@@ -458,9 +458,9 @@ atomic-fuel@^1.3.0:
     rimraf "^2.3.4"
     superagent "^3.8.2"
 
-atomic-reactor@^1.1.2:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/atomic-reactor/-/atomic-reactor-1.1.5.tgz#0839585574301157554a046345d8754714e9d107"
+atomic-reactor@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/atomic-reactor/-/atomic-reactor-1.1.9.tgz#7586be14719d30942ccb99306c26929edd62d436"
   dependencies:
     assets-webpack-plugin "^3.5.1"
     autoprefixer "^7.1.1"
@@ -473,6 +473,7 @@ atomic-reactor@^1.1.2:
     babel-plugin-transform-decorators-legacy "^1.3.4"
     babel-plugin-transform-react-constant-elements "^6.23.0"
     babel-plugin-transform-react-inline-elements "^6.8.0"
+    babel-plugin-transform-react-jsx-source "^6.22.0"
     babel-plugin-transform-react-remove-prop-types "^0.4.5"
     babel-plugin-transform-runtime "^6.23.0"
     babel-preset-es2015 "^6.24.1"
