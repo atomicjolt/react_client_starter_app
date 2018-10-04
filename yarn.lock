@@ -550,9 +550,9 @@ atomic-reactor@^1.1.9:
     webpack-dev-middleware "^1.10.2"
     webpack-hot-middleware "^2.18.0"
 
-atomic-reactor@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/atomic-reactor/-/atomic-reactor-3.0.0.tgz#dc763751efabde6b75a0fd596b4d1290b3ee3a8d"
+atomic-reactor@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/atomic-reactor/-/atomic-reactor-3.1.1.tgz#33b8d7cbb692509f2608d4582c6a41a6052b9b59"
   dependencies:
     assets-webpack-plugin "^3.5.1"
     autoprefixer "^7.1.1"
@@ -584,12 +584,9 @@ atomic-reactor@^3.0.0:
     html-minifier "^3.5.2"
     html-truncate "^1.2.2"
     imports-loader "^0.7.1"
-    jasmine "^2.6.0"
-    jasmine-core "^2.6.2"
-    jest "^20.0.4"
     less "2.7.2"
     less-loader "^4.0.4"
-    lodash "^4.17.4"
+    lodash "^4.17.11"
     marked "^0.3.6"
     minimist "1.2.0"
     nock "^9.0.14"
@@ -5593,6 +5590,10 @@ lodash@4.17.5:
 lodash@^4.0.0, lodash@^4.13.1, lodash@^4.15.0, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@~4.17.10:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
+
+lodash@^4.17.11:
+  version "4.17.11"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
 
 lodash@~2.4.1:
   version "2.4.2"
