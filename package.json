@@ -38,8 +38,11 @@
     "del": "^3.0.0"
   },
   "devDependencies": {
-    "atomic-reactor": "^3.1.1"
+    "atomic-reactor": "^3.2.3"
   },
   "private": true,
-  "workspaces": ["client", "client/apps/*"]
+  "workspaces": [
+    "client",
+    "client/apps/*"
+  ]
 }
