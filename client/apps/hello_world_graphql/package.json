@@ -12,7 +12,7 @@
     "apollo-link-http": "^1.5.9",
     "apollo-link-state": "^0.4.2",
     "atomic-canvas": "^1.7.0",
-    "atomic-fuel": "^2.9.0",
+    "atomic-fuel": "^3.0.0",
     "babel": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
