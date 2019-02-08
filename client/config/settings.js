@@ -1,9 +1,14 @@
 const path = require('path');
+const { isEmpty } = require('lodash');
 
 // There is a warning if the .env file is missing
 // This is fine in a production setting, where settings
 // are loaded from the env and not from a file
-require('dotenv').load({ path: path.join(__dirname, '../../.env') });
+const { error } = require('dotenv').load({ path: path.join(__dirname, '../../.env') });
+
+if (!isEmpty(error)) {
+  throw new Error(error);
+}
 
 const deployConfig = require('../../.s3-website.json');
 
