@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "eventsource-polyfill": "^0.9.6",
-    "superagent": "^4.1.0"
+    "superagent": "^5.1.0"
   },
   "devDependencies": {
     "dotenv": "6.2.0",
