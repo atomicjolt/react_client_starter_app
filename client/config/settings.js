@@ -3,7 +3,7 @@ const path = require('path');
 // There is a warning if the .env file is missing
 // This is fine in a production setting, where settings
 // are loaded from the env and not from a file
-require('dotenv').load({ path: path.join(__dirname, '../../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const deployConfig = require('../../.s3-website.json');
 
@@ -17,10 +17,10 @@ const devOutput  = path.join(__dirname, '../../build/dev', devRelativeOutput);
 const prodOutput = path.join(__dirname, '../../build/prod', prodRelativeOutput);
 
 // const prodAssetsUrl = ''; // Set this to the url where the assets will be deployed.
-                          // If you want the paths to be relative to the deploy then leave this
-                          // value as an empty string. This value could also be a CDN or
-                          // it could be the ssl version of your S3 bucket ie:
-                          // https://s3.amazonaws.com/' + deployConfig.domain;
+// If you want the paths to be relative to the deploy then leave this
+// value as an empty string. This value could also be a CDN or
+// it could be the ssl version of your S3 bucket ie:
+// https://s3.amazonaws.com/' + deployConfig.domain;
 // For local testing set prodAssetsUrl to process.env.ASSETS_URL
 const prodAssetsUrl = `${process.env.ASSETS_URL}:${process.env.ASSETS_PORT}`;
 // const prodAssetsUrl = `https://s3.amazonaws.com/${deployConfig.domain}`;

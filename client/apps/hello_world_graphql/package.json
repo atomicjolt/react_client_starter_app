@@ -7,12 +7,12 @@
     "test_debug": "node inspect jest --runInBand --config=config/jest_config.json;"
   },
   "dependencies": {
-    "apollo-cache-inmemory": "^1.4.2",
-    "apollo-client": "^2.4.11",
-    "apollo-link-http": "^1.5.9",
+    "apollo-cache-inmemory": "^1.6.2",
+    "apollo-client": "^2.6.3",
+    "apollo-link-http": "^1.5.15",
     "apollo-link-state": "^0.4.2",
-    "atomic-canvas": "^1.7.0",
-    "atomic-fuel": "^3.0.0",
+    "atomic-canvas": "^1.8.0",
+    "atomic-fuel": "^3.4.0",
     "babel": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-runtime": "^6.26.0",
@@ -20,18 +20,14 @@
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "history": "^4.7.2",
-    "lodash": "4.17.11",
+    "lodash": "4.17.15",
     "prop-types": "^15.6.1",
-    "react": "^16.7.0",
-    "react-apollo": "^2.3.3",
-    "react-dom": "^16.7.0",
+    "react": "^16.9.0",
+    "react-apollo": "^2.5.7",
+    "react-dom": "^16.9.0",
     "react-hot-loader": "^4.6.3",
     "react-proxy-loader": "^0.3.5",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2"
-  },
-  "devDependencies": {
-    "jest": "^24.1.0",
-    "redux-devtools": "^3.5.0"
   }
 }
