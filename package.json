@@ -34,7 +34,7 @@
     "react"
   ],
   "dependencies": {
-    "del": "^3.0.0"
+    "del": "^5.0.0"
   },
   "devDependencies": {
     "atomic-reactor": "^3.2.3"
