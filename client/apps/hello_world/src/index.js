@@ -21,7 +21,7 @@ es6Promise.polyfill();
 
 class Root extends React.Component {
   render() {
-    const devTools = __DEV__ ? <DevTools /> : null;
+    const devTools = false ? <DevTools /> : null;
     return (
       <Router history={appHistory}>
         <div>

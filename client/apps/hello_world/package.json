@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "test": "jest --config=config/jest_config.json",
-    "watch": "jest --config=config/jest_config.json --watch"
+    "watch": "jest --config=config/jest_config.json --watch",
+    "hot": "node ../../../../webpack.new.js"
   },
   "dependencies": {
     "atomic-fuel": "^3.0.0",
@@ -29,5 +30,17 @@
     "redux-devtools": "^3.5.0",
     "redux-devtools-dock-monitor": "^1.1.3",
     "redux-devtools-log-monitor": "^1.4.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

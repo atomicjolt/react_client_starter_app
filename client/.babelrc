@@ -1,11 +1,11 @@
 {
-  "presets": ["es2015", "react", "stage-0"],
+  "presets": ["@babel/preset-react"],
   "env": {
     "test": {
       "plugins": [
-        ["transform-runtime"],
-        ["transform-decorators-legacy"],
-        ["transform-class-properties"],
+        ["@babel/plugin-transform-runtime"],
+        ["@babel/plugin-proposal-decorators", {"legacy": true}],
+        ["@babel/plugin-proposal-class-properties"],
         ["babel-plugin-rewire"],
       ],
       "ignore": [
@@ -14,9 +14,9 @@
     },
     "development": {
       "plugins": [
-        ["transform-runtime"],
-        ["transform-decorators-legacy"],
-        ["transform-class-properties"],
+        ["@babel/plugin-transform-runtime"],
+        ["@babel/plugin-proposal-decorators", {"legacy": true}],
+        ["@babel/plugin-proposal-class-properties"],
       ],
       "ignore": [
         "node_modules",
@@ -24,10 +24,10 @@
     },
     "hot": {
       "plugins": [
-        ["transform-runtime"],
-        ["transform-decorators-legacy"],
-        ["transform-class-properties"],
-        ["react-hot-loader/babel"],
+        "@babel/plugin-proposal-class-properties",
+        ["@babel/plugin-transform-runtime"],
+        ["@babel/plugin-proposal-decorators", {"legacy": true}],
+        ["@babel/plugin-proposal-class-properties"],
       ],
       "ignore": [
         "node_modules",
@@ -35,9 +35,9 @@
     },
     "production": {
       "plugins": [
-        ["transform-runtime"],
-        ["transform-decorators-legacy"],
-        ["transform-class-properties"],
+        ["@babel/plugin-transform-runtime"],
+        ["@babel/plugin-proposal-decorators", {"legacy": true}],
+        ["@babel/plugin-proposal-class-properties"],
         ["transform-react-constant-elements"],
         ["transform-react-remove-prop-types"],
       ],
